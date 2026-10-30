@@ -33,3 +33,14 @@ Checked on 30 Oct 2026. Show each source on screen when its figure is spoken.
 - Dhaka Tribune (the consulate document): https://www.dhakatribune.com/bangladesh/foreign-affairs/422156/two-bangladeshis-executed-in-saudi-arabia
 - CyberPeace fact-check (a viral video was falsely linked to the case): https://cyberpeace.org/resources/blogs/factcheck-video-of-khadija-belghoum-and-billy-rahman-falsely-linked-to-bangladeshi-nationals-executed-in-saudi-arabia
 - Do NOT describe what allegedly happened in the mosque, and do NOT use the viral video.
+
+## Nazrul Islam (Makkah case): human details
+- Prothom Alo English: https://en.prothomalo.com/bangladesh/lawhyj6g64
+  - 25, Brahmanbaria Sadar; cleaner at Masjid al-Haram; went to Saudi Arabia in Nov 2022 on a Tk 6 lakh loan (Tk 4.5 lakh still unpaid at arrest); arrested about 8 months after arriving; family learned a month later.
+  - Last call 11 Oct 2026, about 2 to 2.5 minutes. On 14 Oct at about 7:30pm, someone phoned from Saudi Arabia to say he had been executed. His aunt Abeda Begum, 65, fainted and died that night.
+  - Mother: "I want to see my son's body one last time." Father: "Now, I am just waiting to see my son's body."
+- The Week, 20 Oct 2026: https://www.theweek.in/news/middle-east/2026/10/20/nazrul-islam-basir-execution-mecca-bangladesh.html
+  - Sentenced under ta'zir. The consulate in Jeddah says it was never notified. Nazrul's father denies he was married to Siti Akhtar.
+  - EXCLUDED from the script: the family's claim of a "dispute with a Pakistani co-worker". It is unverified and accuses an unnamed person.
+- Amnesty, July 2025 (via Business Standard): https://www.business-standard.com/world-news/executions-in-saudi-arabia-hit-record-high-mostly-over-drug-cases-amnesty-125070700666_1.html
+  - 1,816 executions Jan 2014 to Jun 2025; 597 for drug offences, about 3 in 4 of them foreigners. Foreign nationals face "additional challenges" in getting a fair trial.
