@@ -124,8 +124,12 @@ for i, p in enumerate(pieces):
     if p["src"] == "BLACK":
         cmd += ["-f", "lavfi", "-i", f"color=c=black:s={W}x{H}:r={FPS}"]
     else:
-        src = resolve(p["src"]); sd = sdur(src); inn = min(p["inn"], max(0.0, sd - 0.2))
-        cmd += ["-ss", f"{inn:.3f}", "-i", src]
+        src = resolve(p["src"]); sd = sdur(src)
+        # clips that fade out at their end: never hold a faded frame, hold the last fully visible one
+        fades = (p["src"].startswith("MG:") and p["src"] != "MG:endcard") or p["src"] in ("S27", "MAP")
+        usable = sd - (1.0 if fades else 0.05)
+        inn = min(p["inn"], max(0.0, usable - 0.2))
+        cmd += ["-ss", f"{inn:.3f}", "-t", f"{max(0.2, usable - inn):.3f}", "-i", src]
     ovs = [o for o in OVER if o["t0"] < P0 + D and o["t0"] + o["len"] > P0]
     for o in ovs:
         cmd += ["-ss", f"{max(0.0, P0 - o['t0']):.3f}", "-itsoffset", f"{max(0.0, o['t0'] - P0):.3f}", "-t", f"{o['len']:.3f}", "-i", o["src"]]
