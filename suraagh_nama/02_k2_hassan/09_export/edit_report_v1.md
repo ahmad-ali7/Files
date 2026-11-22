@@ -35,7 +35,7 @@ Length 8:56 (536.6 s)
 | 0:42 | S30a | یہ کہانی اُسی شخص کی ہے۔ | empty print push-in: 'yeh kahani usi shakhs ki hai' |
 | 0:50 | S02 | ایک کزن، جو آخر تک اُس کے پاس بیٹھا رہا۔ | a cousin |
 | 0:53 | S20 | ایک اجنبی، جو اُس قطار میں سے رُک گیا۔ | a stranger |
-| 0:55 | S27 | اور کچھ پاکستانی، جو ایک سال بعد اُسے لی | some Pakistanis, a year later |
+| 0:55 | S24 | اور کچھ پاکستانی، جو ایک سال بعد اُسے لی | some Pakistanis, a year later (grey morning on the route) |
 | 0:58 | S01 | آئیے، آپ کو اُس رات میں واپس لے چلتے ہیں | 'aaiye, us raat mein wapas...' |
 | 1:01 | MAP | اُس نوجوان کا نام محمد حسن تھا، | Pakistan > GB > Shigar > Askoli > K2 route |
 | 1:01 | MG:ch1 |  | Act 1 card |
