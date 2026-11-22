@@ -1,0 +1,8 @@
+# media is large; keep it out of git
+*.mp4
+*.mov
+*.m4a
+*.mp3
+*.wav
+08_edit/_work/
+08_edit/_build_*.log

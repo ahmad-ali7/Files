@@ -1,0 +1,536 @@
+{
+ "_readme": "Edit decision list for the K2 Hassan episode. Times are tied to voice-over cue numbers (01_voiceover/cues_ur_en_hi.tsv, 0-based). A segment starts at its cue and runs until the next segment. 'in' = seconds into the source clip. Sources: S##=04_scenes, MG:<name>=03_motion_graphics, MAP=map graphic, GES:<name>=05_earth_studio/<name>.mp4, NEWS:<name>=10_news_footage/<name>.mp4 (missing files become labelled placeholders). Gaps insert silence into the voice-over after a cue; a gap with a card shows that card. Edit this file and re-run build.py.",
+ "intro": {
+  "disclaimer": "MG:disclaimer",
+  "disclaimer_len": 4.0,
+  "black_after": 0.6
+ },
+ "gaps": [
+  {
+   "after_cue": 9,
+   "len": 2.0,
+   "why": "silence after first 'aur qatar chalti rahi'"
+  },
+  {
+   "after_cue": 14,
+   "len": 1.0,
+   "why": "let 'kisi ek tasveer mein bhi nahin' land"
+  },
+  {
+   "after_cue": 21,
+   "len": 4.5,
+   "card": "MG:ch1",
+   "card_at": 0.0,
+   "why": "Act 1 card"
+  },
+  {
+   "after_cue": 67,
+   "len": 1.5,
+   "why": "silence before the stranger"
+  },
+  {
+   "after_cue": 68,
+   "len": 8.0,
+   "card": "MG:ch2",
+   "card_at": 3.5,
+   "why": "stranger reaches him, then Act 2 card"
+  },
+  {
+   "after_cue": 89,
+   "len": 1.0,
+   "why": "after his last breath"
+  },
+  {
+   "after_cue": 91,
+   "len": 2.0,
+   "why": "silence after second 'aur qatar chalti rahi'"
+  },
+  {
+   "after_cue": 114,
+   "len": 4.5,
+   "card": "MG:ch3",
+   "card_at": 0.0,
+   "why": "Act 3 card"
+  },
+  {
+   "after_cue": 137,
+   "len": 1.5,
+   "why": "'Hassan abhi tak barf mein tha'"
+  },
+  {
+   "after_cue": 150,
+   "len": 2.0,
+   "why": "'apne ghar wapas aa gaya' - emotional peak"
+  },
+  {
+   "after_cue": 161,
+   "len": 4.5,
+   "card": "MG:ch4",
+   "card_at": 0.0,
+   "why": "Summit ki tasveer card"
+  },
+  {
+   "after_cue": 171,
+   "len": 2.5,
+   "why": "headlamp goes out after 'kya aap rukte?'"
+  }
+ ],
+ "segments": [
+  {
+   "cue": 0,
+   "src": "S01",
+   "in": 0.0,
+   "note": "H1 lone headlamp, fades up from black"
+  },
+  {
+   "cue": 4,
+   "src": "S02",
+   "in": 0.5,
+   "note": "cousin beside him"
+  },
+  {
+   "cue": 6,
+   "src": "S03",
+   "in": 0.0,
+   "note": "the line arrives"
+  },
+  {
+   "cue": 10,
+   "src": "S06",
+   "in": 0.0,
+   "note": "summit at sunrise, ~100 people"
+  },
+  {
+   "cue": 13,
+   "src": "S07",
+   "in": 5.0,
+   "note": "photo wall, lands on the empty print"
+  },
+  {
+   "cue": 15,
+   "src": "S30a",
+   "in": 0.0,
+   "note": "empty print push-in: 'yeh kahani usi shakhs ki hai'"
+  },
+  {
+   "cue": 18,
+   "src": "S02",
+   "in": 2.0,
+   "note": "a cousin"
+  },
+  {
+   "cue": 19,
+   "src": "S20",
+   "in": 5.0,
+   "note": "a stranger"
+  },
+  {
+   "cue": 20,
+   "src": "S27",
+   "in": 6.0,
+   "note": "some Pakistanis, a year later"
+  },
+  {
+   "cue": 21,
+   "src": "S01",
+   "in": 3.0,
+   "note": "'aaiye, us raat mein wapas...'"
+  },
+  {
+   "cue": 22,
+   "src": "MAP",
+   "in": 0.0,
+   "note": "Pakistan > GB > Shigar > Askoli > K2 route"
+  },
+  {
+   "cue": 28,
+   "src": "MG:wage",
+   "in": 0.0,
+   "note": "Rs 1,700 daily wage"
+  },
+  {
+   "cue": 29,
+   "src": "GES:tisar_zoom",
+   "in": 0.0,
+   "note": "family at home, his dream"
+  },
+  {
+   "cue": 34,
+   "src": "GES:k2_basecamp",
+   "in": 0.0,
+   "note": "above Base Camp for the first time; Russian expedition"
+  },
+  {
+   "cue": 39,
+   "src": "S24",
+   "in": 5.0,
+   "note": "Camp 3: all porters turned back, except Hassan"
+  },
+  {
+   "cue": 43,
+   "src": "S06",
+   "in": 0.0,
+   "note": "what took him up: the summit he dreamed of"
+  },
+  {
+   "cue": 48,
+   "src": "S01",
+   "in": 4.0,
+   "note": "night of 26-27 July"
+  },
+  {
+   "cue": 49,
+   "src": "S17",
+   "in": 0.0,
+   "note": "Bottleneck label lands on 'Bottleneck kehte hain'"
+  },
+  {
+   "cue": 53,
+   "src": "S18",
+   "in": 0.0,
+   "note": "the fall"
+  },
+  {
+   "cue": 55,
+   "src": "S01",
+   "in": 2.5,
+   "note": "mask broken, exposed"
+  },
+  {
+   "cue": 58,
+   "src": "S02",
+   "in": 0.0,
+   "note": "cousin pulling"
+  },
+  {
+   "cue": 61,
+   "src": "S03",
+   "in": 0.0,
+   "note": "Sherpas nearby, no pulley"
+  },
+  {
+   "cue": 63,
+   "src": "S03",
+   "in": 2.0,
+   "note": "the line does not stop; 30-80 counter overlay"
+  },
+  {
+   "cue": 68,
+   "src": "S20",
+   "in": 0.0,
+   "note": "a stranger stopped (runs into the gap)"
+  },
+  {
+   "cue": 69,
+   "src": "S02",
+   "in": 0.0,
+   "note": "Gabriel, the pulley"
+  },
+  {
+   "cue": 72,
+   "src": "S20",
+   "in": 6.0,
+   "note": "hauled him back"
+  },
+  {
+   "cue": 73,
+   "src": "S02",
+   "in": 1.0,
+   "note": "2.5 hours, oxygen, warm water"
+  },
+  {
+   "cue": 77,
+   "src": "S01",
+   "in": 3.0,
+   "note": "Gabriel had to leave: one light again"
+  },
+  {
+   "cue": 79,
+   "src": "S06",
+   "in": 3.0,
+   "note": "same morning, summit"
+  },
+  {
+   "cue": 81,
+   "src": "MG:record",
+   "in": 0.0,
+   "note": "14 peaks, 92 days"
+  },
+  {
+   "cue": 83,
+   "src": "S06",
+   "in": 8.0,
+   "note": "fastest record"
+  },
+  {
+   "cue": 84,
+   "src": "S24",
+   "in": 0.0,
+   "note": "drone footage reconstruction"
+  },
+  {
+   "cue": 88,
+   "src": "S24",
+   "in": 4.0,
+   "note": "last breath"
+  },
+  {
+   "cue": 90,
+   "src": "S03",
+   "in": 4.0,
+   "note": "descending climbers pass again"
+  },
+  {
+   "cue": 92,
+   "src": "MG:answers",
+   "in": 0.0,
+   "note": "could he have been saved? three answers"
+  },
+  {
+   "cue": 94,
+   "src": "S24",
+   "in": 2.0,
+   "note": "Steindl watched the drone footage"
+  },
+  {
+   "cue": 99,
+   "src": "S17",
+   "in": 4.0,
+   "note": "Harila: avalanche, impossible"
+  },
+  {
+   "cue": 102,
+   "src": "S03",
+   "in": 0.0,
+   "note": "cameraman: no strength, no skill"
+  },
+  {
+   "cue": 106,
+   "src": "MG:claim",
+   "in": 0.0,
+   "note": "company vs witnesses"
+  },
+  {
+   "cue": 109,
+   "src": "MG:answers",
+   "in": 6.0,
+   "note": "whose account is true? comment"
+  },
+  {
+   "cue": 111,
+   "src": "S27",
+   "in": 0.0,
+   "note": "a whole year under the snow"
+  },
+  {
+   "cue": 115,
+   "src": "GES:tisar_orbit",
+   "in": 0.0,
+   "note": "another son born"
+  },
+  {
+   "cue": 117,
+   "src": "MG:inquiry",
+   "in": 0.0,
+   "note": "inquiry report"
+  },
+  {
+   "cue": 122,
+   "src": "S03",
+   "in": 5.0,
+   "note": "the dozens who passed - not even mentioned"
+  },
+  {
+   "cue": 124,
+   "src": "MG:price",
+   "in": 0.0,
+   "note": "Rs 2 lakh / $20,000 / Rs 1,700"
+  },
+  {
+   "cue": 129,
+   "src": "MG:wage",
+   "in": 0.0,
+   "note": "only Rs 1,700"
+  },
+  {
+   "cue": 131,
+   "src": "GES:tisar_orbit",
+   "in": 5.0,
+   "note": "minister's three promises"
+  },
+  {
+   "cue": 133,
+   "src": "GES:tisar_zoom",
+   "in": 4.0,
+   "note": "Steindl came to Tisar"
+  },
+  {
+   "cue": 137,
+   "src": "S27",
+   "in": 6.0,
+   "note": "but Hassan was still in the snow"
+  },
+  {
+   "cue": 138,
+   "src": "GES:k2_basecamp",
+   "in": 8.0,
+   "note": "family pleads, Naila Kiani"
+  },
+  {
+   "cue": 142,
+   "src": "NEWS:recovery",
+   "in": 0.0,
+   "note": "five Sadpara climbers (news footage, credited)"
+  },
+  {
+   "cue": 148,
+   "src": "NEWS:funeral",
+   "in": 0.0,
+   "note": "army helicopter, funeral (news footage, wide only)"
+  },
+  {
+   "cue": 150,
+   "src": "GES:tisar_orbit",
+   "in": 6.0,
+   "note": "home at last; new roof, land"
+  },
+  {
+   "cue": 154,
+   "src": "MG:promises",
+   "in": 0.0,
+   "note": "thanks to a stranger; no proof of promises"
+  },
+  {
+   "cue": 157,
+   "src": "MG:law",
+   "in": 0.0,
+   "note": "insurance law"
+  },
+  {
+   "cue": 159,
+   "src": "S24",
+   "in": 1.0,
+   "note": "2025: another porter died; claim unpaid"
+  },
+  {
+   "cue": 162,
+   "src": "S07",
+   "in": 0.0,
+   "note": "every year, flags and records"
+  },
+  {
+   "cue": 164,
+   "src": "S03",
+   "in": 0.0,
+   "note": "the people you never see"
+  },
+  {
+   "cue": 167,
+   "src": "S30a",
+   "in": 0.0,
+   "note": "never in the summit photo"
+  },
+  {
+   "cue": 169,
+   "src": "S01",
+   "in": 2.0,
+   "note": "if you were in that line"
+  },
+  {
+   "cue": 170,
+   "src": "S30b",
+   "in": 0.0,
+   "note": "headlamp dies after 'kya aap rukte?'"
+  },
+  {
+   "cue": 172,
+   "src": "MG:endcard",
+   "in": 0.0,
+   "note": "comment + subscribe; end screen"
+  }
+ ],
+ "overlays": [
+  {
+   "src": "MG:counter_alpha",
+   "at_cue": 66,
+   "offset": -0.5,
+   "note": "30-80 counter"
+  }
+ ],
+ "ai_tag_sources": [
+  "S01",
+  "S02",
+  "S03",
+  "S06",
+  "S17",
+  "S18",
+  "S20",
+  "S24",
+  "S27"
+ ],
+ "music_roles": {
+  "1_main_theme": [
+   [
+    15,
+    48
+   ],
+   [
+    115,
+    117
+   ],
+   [
+    162,
+    171
+   ]
+  ],
+  "2_dark_drone": [
+   [
+    6,
+    9
+   ],
+   [
+    48,
+    67
+   ],
+   [
+    84,
+    90
+   ],
+   [
+    92,
+    111
+   ]
+  ],
+  "3_warm_strings": [
+   [
+    68,
+    79
+   ]
+  ],
+  "4_cold_bed": [
+   [
+    117,
+    137
+   ],
+   [
+    151,
+    162
+   ]
+  ],
+  "5_build": [
+   [
+    10,
+    14
+   ],
+   [
+    79,
+    84
+   ],
+   [
+    138,
+    151
+   ]
+  ]
+ },
+ "_music_note": "music_roles: [first_cue, end_cue) ranges per role. Put tracks in 06_music named 1_main_theme*.mp3 etc.; if a role has no file, a quiet synthesized interim pad is used."
+}
