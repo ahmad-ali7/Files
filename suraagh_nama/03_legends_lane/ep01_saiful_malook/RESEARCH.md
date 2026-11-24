@@ -17,7 +17,7 @@
 ## 1. The discovery that makes this episode: legend and real flood
 - **[Verified] 1907 British record of the local legend.** *Gazetteer of the Hazara District, 1907* (ed. H. D. Watson), pp. 205–206 (archive.org, item in.ernet.dli.2015.31463). It calls the lake **"Safr Maluk Sar"**, "an enchanted lake", and records the story as Kaghan locals told it:
   - **The prince:** a **Prince of Delhi** sees a fairy of wondrous beauty in a dream. Astrologers send him to a glen in Kaghan above Naran for **12 years of religious devotion**.
-  - **The fairies:** **"Badal Jamal, the Queen of the Fairies"** comes down with **360 attendants** to bathe. He snatches her clothes and won't return them until she promises to marry him.
+  - **The fairies:** **"Badal Jamal, the Queen of the Fairies"** comes down with **360 attendants** to bathe **in the river flowing from the lake** (not the lake itself). He snatches her clothes and won't return them until she promises to marry him.
   - **The flood:** a **powerful demon** who also loved her **bursts the embankment that dammed the lake**, and a mighty flood sweeps the valley. **Naran, "then a big city"**, is destroyed. The lake shifts to the centre of the valley "and was confined within narrower limits".
   - **The ending:** the couple escape to a hill, then go back to Delhi.
   - **Last line (quote it on screen):** *"Of the fairies some say that they have deserted the place, others aver that still of nights they come to dance their revels on the grass and bathe themselves in the stream, and then woe is it to the mortal who encounters them!"*
