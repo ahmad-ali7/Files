@@ -1,0 +1,208 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Nastaliq;src:url(fonts/Nastaliq400.ttf);font-weight:400}
+@font-face{font-family:Nastaliq;src:url(fonts/Nastaliq700.ttf);font-weight:700}
+@font-face{font-family:Fell;src:url(fonts/Fell.ttf)}
+@font-face{font-family:Elite;src:url(fonts/Elite.ttf)}
+@font-face{font-family:Amiri;src:url(fonts/Amiri.ttf)}
+@font-face{font-family:Bengali;src:url(fonts/Bengali.ttf)}
+@font-face{font-family:Inter;src:url(fonts/Inter400.ttf);font-weight:400}
+@font-face{font-family:Inter;src:url(fonts/Inter600.ttf);font-weight:600}
+:root{--night:#0A0F24;--indigo:#18204A;--moon:#E9EDF7;--amber:#F4B35E;--gold:#D9A441;--goldL:#F1D08A;--teal:#123F4A;--paper:#E8DBBE;--ink:#2A2016;--blood:#B5452F;--mute:#8E97B8}
+html,body{margin:0;padding:0;background:#000}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;color:var(--moon);background:var(--night)}
+.abs{position:absolute}
+.ur{font-family:Nastaliq,serif;direction:rtl;font-weight:700;line-height:2}
+.en{font-family:Inter,sans-serif;letter-spacing:.22em;text-transform:uppercase;font-weight:600}
+.fell{font-family:Fell,serif}
+.elite{font-family:Elite,monospace}
+.center{left:0;right:0;text-align:center}
+.glow{text-shadow:0 0 24px rgba(244,179,94,.45),0 4px 18px rgba(0,0,0,.9)}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
+#grain{position:absolute;inset:-40px;pointer-events:none;opacity:.06;mix-blend-mode:screen}
+</style></head>
+<body><div id="stage"></div>
+<script src="img/topojson.js"></script>
+<script>
+const S=document.getElementById('stage'),W=1920,H=1080;
+const clamp=x=>Math.max(0,Math.min(1,x)),p=(t,a,b)=>clamp((t-a)/(b-a)),eo=x=>1-Math.pow(1-x,3),eio=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+function E(tag,cls,css,html,parent){const e=document.createElement(tag);if(cls)e.className=cls;if(css)e.style.cssText=css;if(html!=null)e.innerHTML=html;(parent||S).appendChild(e);return e;}
+function cv(){const c=E('canvas','abs','left:0;top:0');c.width=W;c.height=H;return c;}
+function rng(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296;};}
+function n1(seed){const r=rng(seed),P=[];for(let i=0;i<256;i++)P.push(r());return x=>{const i=Math.floor(x),f=x-i,a=P[i&255],b=P[(i+1)&255],u=f*f*(3-2*f);return a+(b-a)*u;};}
+function fade(el,t,a,b,c,d,dy){let o=eo(p(t,a,b));if(c!=null)o*=1-p(t,c,d);el.style.opacity=o;if(dy)el.style.transform=`translateY(${(1-eo(p(t,a,b)))*dy}px)`;}
+let grainCv=null;
+function fx(){const c=document.createElement('canvas');c.width=1000;c.height=580;c.id='grain';c.style.width='2000px';c.style.height='1160px';const g=c.getContext('2d'),im=g.createImageData(1000,580),r=rng(7);for(let i=0;i<im.data.length;i+=4){const v=r()*255;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255;}g.putImageData(im,0,0);S.appendChild(c);grainCv=c;E('div',null,null,null).id='vig';}
+function grain(t){if(grainCv){const k=Math.floor(t*24);grainCv.style.transform=`translate(${(k*37)%40-20}px,${(k*53)%40-20}px)`;}}
+
+// ---------- painterly helpers ----------
+function sky(g,top,bot,moon){const gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,top);gr.addColorStop(1,bot);g.fillStyle=gr;g.fillRect(0,0,W,H);
+  const r=rng(11);for(let i=0;i<420;i++){const x=r()*W,y=r()*H*.6,s=r()*1.6+.2;g.fillStyle=`rgba(233,237,247,${.15+r()*.6})`;g.fillRect(x,y,s,s);}
+  if(moon){const [mx,my,mr]=moon;const hal=g.createRadialGradient(mx,my,mr*.8,mx,my,mr*7);hal.addColorStop(0,'rgba(233,237,247,.35)');hal.addColorStop(1,'rgba(233,237,247,0)');g.fillStyle=hal;g.fillRect(0,0,W,H);g.fillStyle='#EEF1F8';g.beginPath();g.arc(mx,my,mr,0,7);g.fill();g.fillStyle='rgba(180,188,210,.35)';g.beginPath();g.arc(mx-mr*.3,my-mr*.2,mr*.22,0,7);g.arc(mx+mr*.25,my+mr*.3,mr*.15,0,7);g.fill();}}
+function ridgePts(seed,base,amp,scale,sharp,peaks){const n=n1(seed),pts=[];for(let x=-10;x<=W+10;x+=4){let y=0,a=1,s=scale;for(let o=0;o<6;o++){let v=n(x/s+o*17.3);if(sharp)v=1-Math.abs(v*2-1);y+=v*a;a*=.5;s*=.5;}y=base-y*amp;if(peaks)for(const [px,ph,pw] of peaks){y-=ph*Math.exp(-Math.pow((x-px)/pw,2));}pts.push([x,y]);}return pts;}
+function fillRidge(g,pts,fill,rim,rimW){g.beginPath();g.moveTo(pts[0][0],H);for(const [x,y] of pts)g.lineTo(x,y);g.lineTo(pts[pts.length-1][0],H);g.closePath();g.fillStyle=fill;g.fill();if(rim){g.beginPath();pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.strokeStyle=rim;g.lineWidth=rimW||2;g.stroke();}}
+function snowCaps(g,pts,line,col){g.save();g.beginPath();g.moveTo(pts[0][0],H);for(const [x,y] of pts)g.lineTo(x,y);g.lineTo(W,H);g.closePath();g.clip();const n=n1(99);for(let i=1;i<pts.length;i++){const [x,y]=pts[i];if(y<line){const d=(line-y)*.55+n(x/40)*14;g.fillStyle=col;g.fillRect(x,y,4,d);}}g.restore();}
+function valleyScene(g,o){ // shared night valley with lake
+  o=o||{};sky(g,o.top||'#060A1C',o.bot||'#1B2550',o.moon===false?null:[1430,230,46]);
+  fillRidge(g,ridgePts(3,560,260,700,true,[[1180,170,160]]),'#2A3366','rgba(233,237,247,.25)',1.5);
+  snowCaps(g,ridgePts(3,560,260,700,true,[[1180,170,160]]),470,'rgba(225,232,248,.55)');
+  fillRidge(g,ridgePts(8,700,200,520,true,[[420,90,180]]),'#1A2150','rgba(241,208,138,.35)',2);
+  // lake
+  const lg=g.createLinearGradient(0,690,0,820);lg.addColorStop(0,'#2B4A7A');lg.addColorStop(1,'#0B1734');g.fillStyle=lg;g.beginPath();g.ellipse(980,760,560,62,0,0,7);g.fill();
+  g.save();g.beginPath();g.ellipse(980,760,560,62,0,0,7);g.clip();g.fillStyle='rgba(238,241,248,.55)';for(let i=0;i<9;i++){g.globalAlpha=.5-i*.05;g.fillRect(1395+Math.sin(i*1.7)*16,712+i*9,70-i*6,2.2);}g.globalAlpha=1;g.restore();
+  fillRidge(g,ridgePts(21,860,120,380,false),'#0B0F26','rgba(241,208,138,.28)',2);
+  fillRidge(g,ridgePts(33,990,90,260,false),'#04060F');}
+function frameOrn(parent,inset,col){const s=E('div','abs',`left:${inset}px;top:${inset}px;right:${inset}px;bottom:${inset}px;border:2px solid ${col};outline:1px solid ${col};outline-offset:10px;opacity:.85`,null,parent);
+  for(const [x,y] of [[0,0],[1,0],[0,1],[1,1]]){const d=E('div','abs',`width:46px;height:46px;${x?'right':'left'}:-24px;${y?'bottom':'top'}:-24px;transform:rotate(45deg);border:2px solid ${col};background:rgba(10,15,36,.9)`,null,s);E('div','abs',`left:15px;top:15px;width:12px;height:12px;background:${col}`,null,d);}return s;}
+
+const SCENES={
+// 1 — the dastango's bowl and lamp
+SM01_bowl_lamp:{dur:8,init(){const c=cv();this.g=c.getContext('2d');fx();},frame(t){const g=this.g;
+  const bg=g.createRadialGradient(960,620,40,960,620,1100);bg.addColorStop(0,'#1d1a2a');bg.addColorStop(1,'#03040a');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  // white cloth (chandni)
+  const cl=g.createLinearGradient(0,640,0,H);cl.addColorStop(0,'#3a3a44');cl.addColorStop(1,'#d9d6cc');g.fillStyle=cl;g.beginPath();g.moveTo(0,700);g.bezierCurveTo(600,660,1300,660,W,700);g.lineTo(W,H);g.lineTo(0,H);g.fill();
+  // lamp (diya)
+  const fl=1+Math.sin(t*9)*.05+Math.sin(t*23)*.03,lx=560,ly=760;
+  let gl=g.createRadialGradient(lx,ly-70,5,lx,ly-70,520*fl);gl.addColorStop(0,'rgba(244,179,94,.55)');gl.addColorStop(.35,'rgba(244,140,60,.18)');gl.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gl;g.fillRect(0,0,W,H);
+  g.fillStyle='#6b3b1c';g.beginPath();g.ellipse(lx,ly,95,32,0,0,Math.PI);g.fill();g.fillStyle='#8a4d24';g.beginPath();g.ellipse(lx,ly,95,20,0,0,7);g.fill();g.fillStyle='#2a1508';g.beginPath();g.ellipse(lx,ly,78,13,0,0,7);g.fill();
+  g.save();g.translate(lx+52,ly-14);g.scale(1,fl);const fg=g.createRadialGradient(0,-30,2,0,-30,48);fg.addColorStop(0,'#fff6d8');fg.addColorStop(.4,'#ffc35a');fg.addColorStop(1,'rgba(255,120,30,0)');g.fillStyle=fg;g.beginPath();g.moveTo(0,0);g.bezierCurveTo(-22,-20,-10,-60,0,-86);g.bezierCurveTo(10,-60,22,-20,0,0);g.fill();g.restore();
+  // silver bowl
+  const bx=1080,by=770;g.fillStyle='rgba(0,0,0,.45)';g.beginPath();g.ellipse(bx+20,by+92,300,40,0,0,7);g.fill();
+  const bb=g.createLinearGradient(bx-280,0,bx+280,0);bb.addColorStop(0,'#5d6270');bb.addColorStop(.3,'#e6e9f0');bb.addColorStop(.55,'#8e94a3');bb.addColorStop(.8,'#f4d9a6');bb.addColorStop(1,'#4b505c');g.fillStyle=bb;g.beginPath();g.moveTo(bx-280,by);g.bezierCurveTo(bx-260,by+120,bx+260,by+120,bx+280,by);g.fill();
+  g.fillStyle='#c9ced9';g.beginPath();g.ellipse(bx,by,280,58,0,0,7);g.fill();
+  const wg=g.createRadialGradient(bx+60,by-6,10,bx,by,270);wg.addColorStop(0,'#2f5c86');wg.addColorStop(1,'#0a1630');g.fillStyle=wg;g.beginPath();g.ellipse(bx,by+3,262,48,0,0,7);g.fill();
+  // moon & lamp reflection + ripples
+  g.save();g.beginPath();g.ellipse(bx,by+3,262,48,0,0,7);g.clip();g.fillStyle='rgba(238,241,248,.85)';g.beginPath();g.ellipse(bx+70,by-6,26,6,0,0,7);g.fill();g.fillStyle='rgba(244,179,94,.5)';g.beginPath();g.ellipse(bx-150,by+10,30,5,0,0,7);g.fill();
+  for(let i=0;i<5;i++){const k=((t*.35+i/5)%1);g.strokeStyle=`rgba(233,237,247,${.35*(1-k)})`;g.lineWidth=2;g.beginPath();g.ellipse(bx+20,by+4,30+k*240,6+k*42,0,0,7);g.stroke();}g.restore();
+  g.strokeStyle='rgba(255,255,255,.6)';g.lineWidth=3;g.beginPath();g.ellipse(bx,by,280,58,0,Math.PI*1.05,Math.PI*1.6);g.stroke();
+  grain(t);}},
+
+// 2 — title
+SM02_title:{dur:7,init(){const c=cv();this.g=c.getContext('2d');valleyScene(this.g);this.g.fillStyle='rgba(5,7,18,.45)';this.g.fillRect(0,0,W,H);
+  const box=E('div','abs',`left:330px;top:150px;width:1260px;height:620px`);frameOrn(box,0,'rgba(217,164,65,.8)');
+  this.a=E('div','abs center ur',`top:200px;font-size:40px;color:var(--goldL)`,'سراغ نامہ پیش کرتا ہے');
+  this.b=E('div','abs center ur glow',`top:270px;font-size:190px;color:#F6E3B0;line-height:1.6`,'سیف الملوک');
+  this.c=E('div','abs center ur',`top:540px;font-size:58px;color:var(--moon)`,'ایک پری، ایک دیو… اور ڈوبتا ہوا ناران');
+  this.d=E('div','abs center en',`top:700px;font-size:20px;color:var(--mute)`,'SAIFUL MALOOK &nbsp;·&nbsp; A DASTAN, AND ITS SURAAGH');fx();},
+  frame(t){fade(this.a,t,.3,1.2);fade(this.b,t,.8,2.2,null,null,30);fade(this.c,t,1.8,3);fade(this.d,t,2.4,3.4);grain(t);}},
+
+// 3 — sitting card
+SM03_sitting:{dur:4,init(){const bg=E('div','abs',`inset:0;background:radial-gradient(ellipse at 50% 50%,#1a2150 0%,#070a1a 70%)`);
+  const box=E('div','abs',`left:610px;top:330px;width:700px;height:420px`);frameOrn(box,0,'rgba(217,164,65,.85)');
+  this.a=E('div','abs center ur glow',`top:350px;font-size:120px;color:#F6E3B0;line-height:1.7`,'پہلی نشست');
+  this.b=E('div','abs center ur',`top:590px;font-size:46px;color:var(--moon)`,'ایک سچی رات');
+  this.c=E('div','abs center en',`top:705px;font-size:18px;color:var(--mute)`,'SITTING I');fx();},
+  frame(t){fade(this.a,t,.2,1,3.2,3.9,20);fade(this.b,t,.7,1.4,3.2,3.9);fade(this.c,t,1,1.6,3.2,3.9);grain(t);}},
+
+// 4 — dastan: fairies descend to the river below the lake
+SM04_fairies:{dur:10,init(){const c=cv();this.g=c.getContext('2d');const bgc=document.createElement('canvas');bgc.width=W;bgc.height=H;valleyScene(bgc.getContext('2d'));this.bg=bgc;
+  const r=rng(5);this.f=[];for(let i=0;i<360;i++)this.f.push({d:r()*1.4,o:(r()-.5)*90,s:r()*.6+.7,w:r()*6});
+  // river path from lake outflow (right) winding down-left to foreground
+  this.river=[[1460,780],[1500,830],[1420,880],[1300,915],[1160,960],[1040,1010],[960,1090]];fx();},
+  frame(t){const g=this.g;g.drawImage(this.bg,0,0);
+  // river
+  g.save();g.lineCap='round';g.lineJoin='round';g.strokeStyle='rgba(60,100,160,.9)';g.lineWidth=26;g.beginPath();this.river.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.stroke();g.strokeStyle='rgba(200,215,240,.35)';g.lineWidth=4;g.stroke();g.restore();
+  // stream of lights from sky (top-left) curving down to the river
+  const P0=[260,120],P1=[760,20],P2=[1620,520],P3=[1330,905];const bz=(u)=>{const a=1-u;return[a*a*a*P0[0]+3*a*a*u*P1[0]+3*a*u*u*P2[0]+u*u*u*P3[0],a*a*a*P0[1]+3*a*a*u*P1[1]+3*a*u*u*P2[1]+u*u*u*P3[1]]};
+  g.globalCompositeOperation='lighter';
+  for(const q of this.f){let u=(t*.16-q.d);if(u<0)continue;u=Math.min(u,1);const [x,y]=bz(u);const sway=Math.sin(t*2+q.w)*10*(1-u);const xx=x+q.o*(1-u*.7)+sway,yy=y+q.o*.4*(1-u);const a=u>=1?.55+.3*Math.sin(t*3+q.w):.9;
+    const rg=g.createRadialGradient(xx,yy,0,xx,yy,16*q.s);rg.addColorStop(0,`rgba(255,244,214,${a})`);rg.addColorStop(.3,`rgba(244,200,120,${a*.45})`);rg.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=rg;g.fillRect(xx-20,yy-20,40,40);}
+  g.globalCompositeOperation='source-over';
+  // clothes on a rock + tiny prince silhouette
+  g.fillStyle='#05070f';g.beginPath();g.ellipse(1520,948,70,26,0,0,7);g.fill();
+  g.fillStyle='rgba(246,240,225,.9)';g.beginPath();g.moveTo(1470,930);g.quadraticCurveTo(1520,905,1570,928);g.quadraticCurveTo(1530,944,1470,930);g.fill();
+  g.fillStyle='#020309';g.beginPath();g.ellipse(1700,935,9,10,0,0,7);g.fill();g.beginPath();g.moveTo(1688,945);g.lineTo(1712,945);g.lineTo(1722,1010);g.lineTo(1678,1010);g.fill();
+  grain(t);}},
+
+// 5 — 1907 gazetteer quote card
+SM05_gazetteer:{dur:7,init(){E('div','abs',`inset:0;background:radial-gradient(ellipse at 30% 40%,#2b2115 0%,#0a0805 70%)`);
+  const card=E('div','abs',`left:300px;top:150px;width:1320px;height:700px;background:var(--paper);box-shadow:0 40px 90px rgba(0,0,0,.7);transform:rotate(-1.2deg)`);
+  const tex=document.createElement('canvas');tex.width=1320;tex.height=700;tex.style.cssText='position:absolute;inset:0';card.appendChild(tex);const tg=tex.getContext('2d'),r=rng(3);for(let i=0;i<9000;i++){tg.fillStyle=`rgba(120,90,50,${r()*.07})`;tg.fillRect(r()*1320,r()*700,r()*3,r()*3);}const eg=tg.createRadialGradient(660,350,250,660,350,800);eg.addColorStop(0,'rgba(0,0,0,0)');eg.addColorStop(1,'rgba(110,70,25,.45)');tg.fillStyle=eg;tg.fillRect(0,0,1320,700);
+  this.h=E('div','abs elite',`left:80px;top:60px;font-size:26px;color:#5b4630;letter-spacing:.06em`,'GAZETTEER OF THE HAZARA DISTRICT · 1907 · p. 205',card);
+  E('div','abs',`left:80px;top:110px;width:1160px;height:2px;background:#6b553a;opacity:.6`,null,card);
+  this.q=E('div','abs fell',`left:80px;top:160px;width:1160px;font-size:64px;line-height:1.35;color:var(--ink)`,'“…It is an <span style="background:linear-gradient(transparent 60%,rgba(181,69,47,.35) 60%)">enchanted lake</span>, and of it the following story is told…”',card);
+  this.u=E('div','abs ur',`right:80px;top:420px;font-size:64px;color:#3a2a1a;line-height:1.8`,'"یہ ایک طلسمی جھیل ہے…"',card);
+  this.s=E('div','abs elite',`left:80px;bottom:50px;font-size:20px;color:#6b553a`,'Source: archive.org · in.ernet.dli.2015.31463 · public domain',card);fx();},
+  frame(t){fade(this.h,t,.3,1);fade(this.q,t,.8,2,null,null,20);fade(this.u,t,2,3);fade(this.s,t,2.6,3.4);grain(t);}},
+
+// 6 — the journey map
+SM06_journey:{dur:14,async init(){const c=cv();this.g=c.getContext('2d');const land=topojson.feature(await (await fetch('img/land.json')).json(),(await (await fetch('img/land.json')).json()).objects.land);
+  this.lon0=24;this.lon1=100;this.lat0=4;this.lat1=44;const sx=W/(this.lon1-this.lon0);this.k=sx;this.P=(lat,lon)=>[(lon-this.lon0)*sx, (this.lat1-lat)*sx+ (H-(this.lat1-this.lat0)*sx)/2];
+  const bg=document.createElement('canvas');bg.width=W;bg.height=H;const b=bg.getContext('2d');const oc=b.createRadialGradient(960,540,100,960,540,1200);oc.addColorStop(0,'#0f1636');oc.addColorStop(1,'#04060f');b.fillStyle=oc;b.fillRect(0,0,W,H);
+  b.beginPath();for(const f of land.features){const polys=f.geometry.type==='Polygon'?[f.geometry.coordinates]:f.geometry.coordinates;for(const poly of polys)for(const ring of poly){ring.forEach(([lo,la],i)=>{const [x,y]=this.P(la,lo);i?b.lineTo(x,y):b.moveTo(x,y);});b.closePath();}}
+  b.fillStyle='#1d2552';b.fill();b.strokeStyle='rgba(217,164,65,.55)';b.lineWidth=1.4;b.stroke();this.bg=bg;
+  this.stops=[{lat:30.04,lon:31.24,ur:'الف لیلہ',sc:'<span style="font-family:Amiri">ألف ليلة وليلة</span>',y:'عربی',dx:-40,dy:60},
+    {lat:32.65,lon:51.67,ur:'فارسی داستان',sc:'<span style="font-family:Amiri">حکایت سیف‌الملوک</span>',y:'نسخہ 1625',dx:0,dy:-150},
+    {lat:17.38,lon:78.40,ur:'ملا غواصی · گولکنڈہ',sc:'دکنی اُردو',y:'1035ھ',dx:-330,dy:30},
+    {lat:20.59,lon:93.19,ur:'سید علاؤل · آراکان',sc:'<span style="font-family:Bengali">সয়ফুলমুলুক বদিউজ্জামাল</span>',y:'1669',dx:-200,dy:60},
+    {lat:33.07,lon:73.74,ur:'میاں محمد بخش · کھڑی شریف',sc:'پنجابی',y:'1863',dx:30,dy:10},
+    {lat:34.877,lon:73.694,ur:'کاغان · جھیل سیف الملوک',sc:'مقامی داستان',y:'1907',dx:40,dy:-130}];
+  this.labs=this.stops.map(s=>{const [x,y]=this.P(s.lat,s.lon);const d=E('div','abs',`left:${x+s.dx}px;top:${y+s.dy}px;white-space:nowrap;opacity:0;text-align:right`,`<div class="ur" style="font-size:34px;color:#F6E3B0;line-height:1.6;text-shadow:0 2px 10px #000">${s.ur}</div><div style="font-size:26px;color:var(--moon);direction:rtl;text-shadow:0 2px 8px #000">${s.sc} <span class="ur" style="font-size:24px;color:var(--amber)">· ${s.y}</span></div>`);return d;});
+  this.note=E('div','abs en',`left:40px;bottom:28px;font-size:14px;color:var(--mute);letter-spacing:.12em`,'ORDER OF KNOWN VERSIONS — NOT A TRAVEL ROUTE · MAP: NATURAL EARTH');
+  this.tt=E('div','abs ur glow',`right:70px;bottom:60px;font-size:60px;color:#F6E3B0`,'ایک داستان کا سفر');fx();},
+  frame(t){const g=this.g;g.drawImage(this.bg,0,0);const pts=this.stops.map(s=>this.P(s.lat,s.lon));const seg=2,start=1;
+  g.save();g.lineCap='round';g.strokeStyle='#F4B35E';g.lineWidth=4;g.shadowColor='rgba(244,179,94,.9)';g.shadowBlur=14;g.setLineDash([2,12]);
+  for(let i=0;i<pts.length-1;i++){const u=eio(p(t,start+i*seg,start+(i+1)*seg));if(u<=0)break;const [x0,y0]=pts[i],[x1,y1]=pts[i+1];const mx=(x0+x1)/2,my=Math.min(y0,y1)-Math.abs(x1-x0)*.25-60;g.beginPath();const N=60;for(let k=0;k<=N*u;k++){const v=k/N,a=1-v;const x=a*a*x0+2*a*v*mx+v*v*x1,y=a*a*y0+2*a*v*my+v*v*y1;k?g.lineTo(x,y):g.moveTo(x,y);}g.stroke();}
+  g.restore();
+  this.stops.forEach((s,i)=>{const on=p(t,start+(i-1)*seg+seg*.9,start+(i-1)*seg+seg*1.2+.01);const [x,y]=pts[i];if(i===0||on>0){const a=i===0?p(t,.3,1):on;g.fillStyle=`rgba(244,179,94,${a})`;g.beginPath();g.arc(x,y,9,0,7);g.fill();g.strokeStyle=`rgba(255,240,200,${a*.6})`;g.lineWidth=2;g.beginPath();g.arc(x,y,18+Math.sin(t*3)*3,0,7);g.stroke();}this.labs[i].style.opacity=i===0?p(t,.3,1):on;});
+  grain(t);}},
+
+// 7 — Bakhsh verse
+SM07_verse:{dur:8,init(){const c=cv();this.g=c.getContext('2d');valleyScene(this.g,{top:'#0b0f28',bot:'#3a2c48'});this.g.fillStyle='rgba(4,6,15,.55)';this.g.fillRect(0,0,W,H);
+  const box=E('div','abs',`left:260px;top:170px;width:1400px;height:640px`);frameOrn(box,0,'rgba(217,164,65,.7)');
+  this.l1=E('div','abs center ur glow',`top:240px;font-size:84px;color:#F6E3B0;line-height:1.9`,'لوئِ لوئِ بھر لے کڑیئے، جے تدھ بھانڈا بھرنا');
+  this.l2=E('div','abs center ur glow',`top:400px;font-size:84px;color:#F6E3B0;line-height:1.9`,'شام پئی بن شام محمد، گھر جاندی نے ڈرنا');
+  this.m=E('div','abs center ur',`top:600px;font-size:40px;color:var(--moon);font-weight:400`,'جب تک اُجالا ہے، اپنا گھڑا بھر لے… شام ڈھل گئی تو گھر لوٹتے ڈر لگے گا');
+  this.a=E('div','abs center en',`top:730px;font-size:18px;color:var(--mute)`,'MIAN MUHAMMAD BAKHSH · SAIF-UL-MALOOK (1863)');fx();},
+  frame(t){fade(this.l1,t,.5,1.8,null,null,16);fade(this.l2,t,1.8,3.1,null,null,16);fade(this.m,t,3.4,4.4);fade(this.a,t,4,5);grain(t);}},
+
+// 8 — the real demon: cross-section
+SM08_section:{dur:9,init(){const c=cv();this.g=c.getContext('2d');E('div','abs',`inset:0;z-index:-1`);
+  this.t1=E('div','abs ur glow',`right:90px;top:50px;font-size:78px;color:#F6E3B0`,'اصلی دیو');
+  this.l1=E('div','abs ur',`left:1180px;top:300px;font-size:38px;color:var(--amber);line-height:1.7;text-align:right;width:560px`,'مورین: گلیشیئر کی چھوڑی ہوئی<br>پتھروں اور مٹی کی قدرتی دیوار');
+  this.l2=E('div','abs ur',`left:520px;top:640px;font-size:36px;color:var(--moon)`,'گہرائی: تقریباً 34 میٹر (رپورٹ شدہ)');
+  this.l3=E('div','abs',`left:1500px;top:850px;font-size:36px;color:var(--moon);white-space:nowrap`,'<span class="ur">ناران کی طرف</span> <span style="font-family:Inter;font-size:40px">↘</span>');
+  this.n=E('div','abs en',`left:40px;bottom:28px;font-size:14px;color:var(--mute);letter-spacing:.12em`,'SCHEMATIC · NOT TO SCALE');fx();},
+  frame(t){const g=this.g;const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#070b1e');bg.addColorStop(1,'#141c42');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  // ground profile: left mountain, lake basin, moraine hump, valley drop right
+  const prof=[[0,260],[200,330],[420,470],[520,560],[600,600],[1000,612],[1080,560],[1140,470],[1210,440],[1290,500],[1420,700],[1600,820],[1920,900]];
+  const lakeY=520;
+  // water
+  const u=eo(p(t,.5,2.2));g.fillStyle='rgba(43,90,140,.9)';g.beginPath();g.moveTo(470,lakeY);for(const [x,y] of prof.filter(q=>q[0]>=470&&q[0]<=1150))g.lineTo(x,Math.max(lakeY,lakeY+(y-lakeY)*u));g.lineTo(1150,lakeY);g.closePath();g.fill();
+  g.fillStyle='rgba(200,220,250,.5)';g.fillRect(470,lakeY-2,680,3);
+  // rock
+  g.beginPath();g.moveTo(0,H);prof.forEach(([x,y])=>g.lineTo(x,y));g.lineTo(W,H);g.closePath();const rg=g.createLinearGradient(0,300,0,H);rg.addColorStop(0,'#3a3550');rg.addColorStop(1,'#14111f');g.fillStyle=rg;g.fill();
+  // moraine highlight
+  const m=p(t,2.5,3.5),pulse=.55+.45*Math.sin(t*4);g.save();g.beginPath();g.moveTo(1000,612);g.lineTo(1080,560);g.lineTo(1140,470);g.lineTo(1210,440);g.lineTo(1290,500);g.lineTo(1420,700);g.lineTo(1150,700);g.closePath();g.fillStyle=`rgba(120,96,80,${m})`;g.fill();g.fillStyle=`rgba(244,179,94,${.22*m*pulse})`;g.fill();g.strokeStyle=`rgba(244,179,94,${m*.8})`;g.lineWidth=3;g.shadowColor='rgba(244,179,94,.9)';g.shadowBlur=18;g.beginPath();g.moveTo(1000,612);g.lineTo(1080,560);g.lineTo(1140,470);g.lineTo(1210,440);g.lineTo(1290,500);g.lineTo(1420,700);g.stroke();g.shadowBlur=0;g.beginPath();g.moveTo(1000,612);g.lineTo(1080,560);g.lineTo(1140,470);g.lineTo(1210,440);g.lineTo(1290,500);g.lineTo(1420,700);g.lineTo(1150,700);g.closePath();
+  g.clip();const r=rng(2);for(let i=0;i<220;i++){const x=1000+r()*420,y=440+r()*260,rr=r()*14+4;g.fillStyle=`rgba(${60+r()*60|0},${55+r()*45|0},${60+r()*40|0},${m})`;g.beginPath();g.ellipse(x,y,rr,rr*.7,r()*3,0,7);g.fill();}g.restore();
+  // depth gauge
+  const d=p(t,3.5,4.5);g.strokeStyle=`rgba(233,237,247,${d})`;g.lineWidth=2;g.setLineDash([8,8]);g.beginPath();g.moveTo(800,lakeY);g.lineTo(800,lakeY+(608-lakeY)*d);g.stroke();g.setLineDash([]);
+  this.l1.style.opacity=m;this.l2.style.opacity=d;this.l3.style.opacity=p(t,4.5,5.5);this.t1.style.opacity=p(t,.2,1);
+  // label arrow from moraine to label
+  g.strokeStyle=`rgba(244,179,94,${m})`;g.lineWidth=2;g.beginPath();g.moveTo(1230,430);g.lineTo(1300,380);g.stroke();
+  grain(t);}},
+
+// 9 — events timeline
+SM09_events:{dur:9,init(){E('div','abs',`inset:0;background:radial-gradient(ellipse at 50% 40%,#18204A 0%,#05070f 75%)`);
+  this.tt=E('div','abs center ur glow',`top:70px;font-size:72px;color:#F6E3B0`,'یہ دیو سوتا نہیں');
+  const ev=[['1893','سیلاب نے وادی کے تقریباً<br>سارے پُل بہا دیے','Mason report, 1895'],['2005','جھیل کا پانی<br>ناران بازار تک آیا','Dawn, 26 June 2005'],['2025','لینڈ سلائیڈ: 500 سے زیادہ<br>سیاح پھنس گئے','Express Tribune, July 2025']];
+  E('div','abs',`left:260px;top:470px;width:1400px;height:3px;background:linear-gradient(90deg,transparent,rgba(217,164,65,.8),transparent)`);
+  this.c=ev.map((e,i)=>{const x=260+i*470;const d=E('div','abs',`left:${x}px;top:330px;width:460px;text-align:center;opacity:0`);d.innerHTML=`<div style="font-family:Fell;font-size:96px;color:var(--amber);text-shadow:0 0 20px rgba(244,179,94,.5)">${e[0]}</div><div style="width:22px;height:22px;border-radius:50%;background:var(--amber);margin:6px auto 26px;box-shadow:0 0 20px var(--amber)"></div><div class="ur" style="font-size:40px;line-height:1.8;color:var(--moon)">${e[1]}</div><div class="elite" style="font-size:18px;color:var(--mute);margin-top:12px">${e[2]}</div>`;return d;});fx();},
+  frame(t){this.tt.style.opacity=p(t,.2,1);this.c.forEach((d,i)=>fade(d,t,1+i*1.4,2+i*1.4,null,null,24));grain(t);}},
+
+// 10 — thumbnail concept
+SM10_thumb:{dur:1,init(){const c=cv();const g=c.getContext('2d');valleyScene(g,{top:'#04060f',bot:'#1a1f44'});
+  // demon eyes in cloud over mountains
+  const cl=g.createRadialGradient(1250,330,30,1250,330,520);cl.addColorStop(0,'rgba(20,14,30,.95)');cl.addColorStop(1,'rgba(20,14,30,0)');g.fillStyle=cl;g.fillRect(0,0,W,H);
+  for(const x of [1170,1330]){const e=g.createRadialGradient(x,320,0,x,320,60);e.addColorStop(0,'rgba(255,90,40,1)');e.addColorStop(.25,'rgba(255,60,20,.7)');e.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=e;g.fillRect(x-70,250,140,140);g.fillStyle='#ffd0a0';g.beginPath();g.ellipse(x,322,22,8,x<1250?.2:-.2,0,7);g.fill();}
+  // glowing crack at the dam
+  g.strokeStyle='rgba(255,200,120,.95)';g.lineWidth=6;g.shadowColor='#ffb050';g.shadowBlur=30;g.beginPath();g.moveTo(1500,700);g.lineTo(1530,740);g.lineTo(1515,770);g.lineTo(1550,810);g.lineTo(1540,850);g.stroke();g.shadowBlur=0;
+  E('div','abs ur',`left:70px;top:10px;font-size:170px;color:#fff;line-height:1.5;text-shadow:0 6px 0 #000,0 0 40px rgba(0,0,0,.9)`,'جھیل کا دیو');
+  E('div','abs',`left:90px;top:330px;padding:6px 26px;background:var(--paper);transform:rotate(-3deg);box-shadow:0 10px 30px #000`,'<span class="elite" style="font-size:44px;color:var(--ink)">1907 RECORD</span>');
+  E('div','abs ur',`left:90px;top:470px;font-size:96px;color:#F4B35E;text-shadow:0 5px 0 #000`,'سچ یا داستان؟');fx();},frame(t){}},
+};
+window.setup=async function(name){S.innerHTML='';S.style.background='';grainCv=null;const sc=SCENES[name];window._sc=sc;await sc.init();await document.fonts.ready;sc.frame(0);return {dur:sc.dur,transparent:false};};
+window.renderFrame=function(t){window._sc.frame.call(window._sc,t);};
+window.sceneList=Object.keys(SCENES);
+</script></body></html>
