@@ -87,3 +87,17 @@ Ahmad's feedback: the drawn frames looked machine-made. **Every frame now starts
 - **Moraine label:** confirm on satellite imagery and the terrain model which ridge is the damming moraine before the label says "it holds the lake". It currently says only "گلیشیئر کا لایا ہوا پتھر اور مٹی".
 
 **Code:** `real/craft.py` (grading and light compositing), `real/f_fairies.py`, `real/real.html` (layouts). **Frames:** `style_frames_real/`.
+
+## v2 crafts finished (stills; animation comes later, all in one pass)
+| Frame | Real base | Fantasy element |
+|---|---|---|
+| R02 title | Night-graded lake footage | — |
+| R03 astrologer | Real candle footage (Pexels) and an aged-paper photo (Pixabay) | A horoscope chart in ink, with Urdu zodiac names; red mark at "کاغان" |
+| R04 fairies | Night-graded lake footage | 360 lights reflected in the water |
+| R05 1907 page | Real scan, p. 205 | Pencil underline |
+| R06 1907 photo | Real 1907 plate | — |
+| R06b journey map | **Imperial Gazetteer Atlas 1908, Plate 2** (public domain; binding-fold artefact cleaned) | Ink route Egypt → Persia → Golconda → Arakan → Khari Sharif → Kaghan, with labels |
+| R07 flood | Sentinel-2 satellite image and real terrain | Flood along the real valley path to Naran |
+| R08 moraine | Real footage | Hand-drawn line |
+| R09 demon | Real lake footage, plus **real storm sky and lightning** (Pexels, Pixabay) | A demon shape **inside the storm cloud**, with an edge lit only by the lightning, and ember eyes |
+| R10 thumbnail | Night lake | A torn strip of the real 1907 page |
