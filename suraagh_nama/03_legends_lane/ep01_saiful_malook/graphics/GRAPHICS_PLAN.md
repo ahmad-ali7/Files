@@ -58,3 +58,32 @@ Coordinates are approximate.
 ## How to render
 - **Stills:** `node stills.js <abs path>/web <outdir> SM04_fairies@8 …`
 - **Video:** use the K2 `render.js` with `HTML=scenes.html`. It uses the same API (`setup`, `renderFrame`, `sceneList`).
+
+---
+
+# v2 direction: "real craft" (replaces the drawn look above)
+Ahmad's feedback: the drawn frames looked machine-made. **Every frame now starts from something real**, and the craft is in how we treat it.
+
+| Element | v1 (drawn) | v2 (real) |
+|---|---|---|
+| Night lake | Drawn mountains | **Real drone footage of the lake** (Pixabay), graded to night by hand ("day-for-night", a classic film technique): sky masked along a hand-traced skyline, moonlit snow, film grain, halation (the warm glow around bright light on film) |
+| Fairies | Dots over drawn hills | Light points with halo and **reflection on the real water** |
+| 1907 record | Typed card | **The real scan of page 205** (archive.org, public domain) under lamp light, with a pencil underline on "enchanted lake" |
+| 1907 evidence | — | **A real 1907 photograph** from the same book: "THE SAFR MALUK RIDGE, TO THE NORTH OF THE LAKE" |
+| The real demon | Diagram | **Real footage of the rocky moraine** with a hand-drawn line |
+| Thumbnail | Drawn eyes | Real night lake, plus a **torn strip of the real 1907 page**: "The inhabitants of Naran, then a big city…" |
+
+## New finds in the 1907 book (public domain)
+- Page 205 says it directly: **"(sar meaning lake)"**. This backs up the side-remark about "سیف الملوک سر".
+- **Photo plates:** "The Safr Maluk ridge, to the north of the lake"; "The Manur peak"; "Flowers in Kagan"; "The Kagan road, a little above Kagan village".
+
+## Still to build in v2
+- **Opening (needs Ahmad):** film a real clay diya and a steel or silver bowl of water on a white cloth at night, on a phone, 4K if possible. Hands only, in a white sleeve, no face. **The most human-crafted shot in the episode.**
+- **Dastan scenes:**
+  - The dream and the astrologers, as real candle and paper textures with shadow-play (hands only).
+  - The demon as real weather: storm clouds and an avalanche or debris flow, from stock footage.
+- **The flood:** real terrain plus free satellite imagery (Sentinel-2) in 3D, water running down the valley to Naran.
+- **Journey map:** a **real public-domain old map** of Asia (for example, the 1909 Imperial Gazetteer atlas) with an ink route.
+- **Moraine label:** confirm on satellite imagery and the terrain model which ridge is the damming moraine before the label says "it holds the lake". It currently says only "گلیشیئر کا لایا ہوا پتھر اور مٹی".
+
+**Code:** `real/craft.py` (grading and light compositing), `real/f_fairies.py`, `real/real.html` (layouts). **Frames:** `style_frames_real/`.
