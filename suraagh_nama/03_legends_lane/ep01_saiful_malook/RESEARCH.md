@@ -4,6 +4,16 @@
 
 ---
 
+
+## 0. Update: full read of all sources (see DATASET.csv and OPEN_QUESTIONS.md)
+- **Earliest written trace of the name:** the *Gazetteer of the Hazara District 1883–84*, Ch. I p. 5, lists **"Saiful-maluk-sar"** (½ mile × 500 yards, 10,718 ft) and, in the route table, a **"Saif-ul-Malukh hill… with rich pasturage around and a few huts"**. **The legend is not recorded in 1883–84.** It first appears in writing in 1907. Script line: by 1883–84, twenty years after Mian Muhammad Bakhsh's poem, the lake already carried the prince's name.
+- **The legend is a fusion.** The Nights romance has no clothes-stealing scene. The Kaghan version adds the **mountain fairy belief** that taking a fairy's clothes gives you power over her (*Acta Orientalia* 75 (2014) pp. 96–97, 114, citing Lorimer 1929, Jettmar 1975, Müller-Stellrecht 1980). Folklorists call the worldwide motif the "swan maiden". F02, p. 81: belief in real fairies "is still much alive" in KP and the Northern Areas.
+- **Malika Parbat** ("Mali ka Parbat", 17,360 ft) is a **Revenue Survey map name**. In 1907 "the residents in the valley do not appear to know this fine hill by this or any other name" (p. 207 footnote).
+- **Fish:** "too cold for fish" (1883–84); "none are to be found" (1907). **Brown trout** came to Kaghan's Shinu hatchery in **1928** (FAO). UNESCO 2007 lists trout at the lake.
+- **Naran then and now:** "a collection of huts" at 8,086 ft (1907), against the legend's "big city". A semi-nomadic village with a small bazaar (2007). A tourist hub today.
+- **National park** declared in **2003**: 12,026 acres (Dawn).
+- **Abbott's 1854 book *Legends, Ballads, &c.*** (searched in full): no Saiful Malook. His 1854/55 journal article is still to be checked.
+
 ## 1. The discovery that makes this episode: legend and real flood
 - **[Verified] 1907 British record of the local legend.** *Gazetteer of the Hazara District, 1907* (ed. H. D. Watson), pp. 205–206 (archive.org, item in.ernet.dli.2015.31463). It calls the lake **"Safr Maluk Sar"**, "an enchanted lake", and records the story as Kaghan locals told it:
   - **The prince:** a **Prince of Delhi** sees a fairy of wondrous beauty in a dream. Astrologers send him to a glen in Kaghan above Naran for **12 years of religious devotion**.
