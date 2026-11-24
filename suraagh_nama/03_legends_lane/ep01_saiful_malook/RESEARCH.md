@@ -24,6 +24,28 @@
 - **The angle:** the legend's demon breaking the lake's dam and flooding Naran describes a **real hazard**. The lake is a **glacial lake held back by a moraine** (a natural dam of rock and debris left by a glacier), and in 2005 its water really did reach Naran.
   - Present it as a striking parallel. It is **not proof** that the legend remembers a real flood.
 
+## 1b. A century later: the same legend in the UNESCO survey (about 2006–07)
+**[Verified]** UNESCO Islamabad, *Mapping and Documentation of the Cultural Assets of Kaghan Valley, Mansehra*, final report by **Prof. (Dr.) Ihsan Ali**, Hazara University; project begun 15 Sept 2006, after the 8 Oct 2005 earthquake. Section 4.1.2, p. 36: "Badr-i-Jamal and Prince Saif-ul-Malook".
+- **The prince:** a **"Mughal prince"** (in 1907, a "Prince of Delhi") sees a fairy in a dream and is told to go to Naran for **twelve years' devotion**.
+- **The name:** the report repeats the folk derivation from **"Safr Maluk"**, "the travel of countries".
+- **The fairy and the demon:** the queen of the fairies, **Badar Jamal**, comes to bathe in the lake; the prince takes her clothes; she agrees to marry him; **"the demon who loved her smashed the embankment of the lake and thus flooded Naran."**
+- **New detail, not in 1907:** *"The lovers hid in an extant cave under a mound of graves in Naran and escaped to live happily ever after in Delhi."* The legend has been tied to a specific spot in Naran town.
+- **Songs and recordings:** p. 76 says the lake's "charismatic myth… has been interesting subject of mysterious stories and songs among the inhabitants of the area". The team **recorded folklore on audio cassettes** to be kept in a Hazara University museum. Possible lead: ask Hazara University's Department of Cultural Heritage and Tourism Management whether a clip can be used.
+- **The author's recommendation:** the lake "should be preserved and added in the world Heritage of UNESCO". That is **the author's view, not a nomination**. Don't say UNESCO nominated it.
+- **The lake then:** about half a mile long, about 8 km from Naran, a narrow jeep road crossing glaciers, a 2-hour walk; **"There is no hotel and restaurant in the surrounding area."** Contrast this with today's tent villages and the 2021 study's warning about pollution from them.
+- **Height discrepancy:** the report says 3,500 m, against about 3,224 m elsewhere. Use about 3,200 m and avoid precise claims.
+- **Ansoo Jheel:** named for its shape "like a tearing eye", reached via Manoor Kali.
+- **The script line:** a hundred years apart, British officials in 1907 and Pakistani researchers in 2007 heard the **same story from the same valley**: the same demon, the same broken dam, the same flooded Naran.
+
+**Other Kaghan folklore in the same report, for future episodes:**
+- **Lala Afghani and Sohni:** Lalazar, said to mean "sacrifice". An Afghan boy is killed for loving a local girl; the forest is named "Sohni".
+- **Munshi and Darshi:** "Darshi ka Jangal". A British-era clerk of a timber company is killed for loving a local girl; the Gujri folk song **"Qanchi"** tells their story.
+- **The Sikh treasure of Pehli Lari:** villagers dig for it, an earthquake stops them.
+- **Ghazi Baba of Khanian:** hoof prints on a rock; a "sword mark" removed during road building.
+- **The blind brothers of Kameel Gali:** a dream, a digging, an earthquake, blindness.
+- **The Maryam Zamani stone,** Balakot (240 lb).
+- From the 1907 gazetteer: **Lulusar**, where Akbar's blind daughter is said to have regained her sight.
+
 ## 2. How the story travelled: about 1,000 years and 4,000 km
 | When | Where | Version | Status |
 |---|---|---|---|
@@ -66,7 +88,7 @@
 
 ## 6. Story spine (for the script)
 1. **Cold open (0:00–0:30):** night, June 2005, Naran. Mosque loudspeakers: leave your homes, the lake is overflowing. Then: a hundred years earlier, a British record wrote down a story the people of this valley already told, about a demon who broke this lake and drowned Naran.
-2. **The legend, 1907 local version:** Delhi prince, the dream, 12 years, Badal Jamal and 360 fairies, the stolen clothes, the jealous demon, the dam, the flood. **Re-hook at about 2:00:** this prince wasn't born in Kaghan. His story walked here over a thousand years.
+2. **The legend, 1907 local version:** Delhi prince, the dream, 12 years, Badal Jamal and 360 fairies, the stolen clothes, the jealous demon, the dam, the flood. Then 2007: Pakistani researchers record the same story, now with a Mughal prince and a cave under a mound of graves in Naran where the lovers hid. **Re-hook at about 2:00:** this prince wasn't born in Kaghan. His story walked here over a thousand years.
 3. **The journey:** Arabian Nights (Egypt, Sulaiman's robe) → Persian → Golconda 1625 (Ghawwasi, Urdu) → Arakan 1669 (Alaol, Bengali) → Khari Sharif 1863 (Mian Muhammad Bakhsh). The Egyptian prince becomes a Delhi prince in Kaghan.
 4. **Re-hook at about 5:00:** newer layers. Ansoo Jheel (the giant's tear, "found" from the air in 1993) and the full-moon belief.
 5. **The suraagh, science:**
@@ -99,6 +121,7 @@
 - Any haunting claim stated as fact.
 
 ## Sources
+- UNESCO Islamabad, *Mapping and Documentation of the Cultural Assets of Kaghan Valley, Mansehra*, final report, Prof. Dr. Ihsan Ali, Hazara University (project begun Sept 2006), §4.1.2 p. 36 and p. 76: https://unesdoc.unesco.org/ark:/48223/pf0000216933 (PDF supplied by Ahmad)
 - *Gazetteer of the Hazara District, 1907*, pp. 205–206: https://archive.org/details/in.ernet.dli.2015.31463
 - Dawn, 26 June 2005, lake overflow: https://www.dawn.com/news/145184
 - Arabian Nights tale: https://arabiannights.fandom.com/wiki/Story_of_Prince_Sayf_al-Muluk_and_the_Princess_Badi'a_al-Jamal ; https://www.originalsources.com/Document.aspx?DocID=YZ6JY4XJHA332SX&H=1
