@@ -31,7 +31,7 @@ All claims are in `DATASET.csv`.
 ## C. Documents for you to find (I couldn't access these)
 | Priority | Document | Why it matters | Where to look |
 |---|---|---|---|
-| ⭐⭐⭐ | **Hazara University folklore audio cassettes** from the UNESCO survey (2006–07) | Real local voices singing or telling the lake's myth | Hazara University, Dept. of Cultural Heritage & Tourism Management / Hazara Cultural Museum (email or call) |
+| ⭐⭐⭐ | **Hazara University folklore audio cassettes** from the UNESCO survey (2006–07) | Real local voices singing or telling the lake's myth | **Dept. of Archaeology**, Hazara University (runs the Abbott Museum and the Hazara University Museum). Ask for **Ihsanullah Jan** (lecturer, on the 2006 survey team) or **Dr. Abdul Hameed** (likely the survey's "Abdul Hameed Chitrali"). Published numbers: Chairman Prof. Dr. Shakir Ullah +92 333 1545942; department office (+92) 997-414240; Mon–Fri 8:30–4:30 |
 | ⭐⭐⭐ | **S. Khan, *Wadi Kaghan: Tarikh, Log, Saqafat aur Sayahat*** (Urdu) | Cited in the UNESCO report; likely contains local versions and history | Mansehra/Abbottabad bookshops, Hazara University library, Rekhta, the Punjab University library catalogue |
 | ⭐⭐ | **James Abbott, "On the Ballads and Legend of the Punjab"**, *Journal of the Asiatic Society of Bengal* vol. 23 (1854/55), pp. 59–91, 123–163 | The 1883–84 gazetteer points to it for Hazara's old legends; could be the oldest record | Biodiversity Heritage Library / JSTOR / archive.org (search "Journal of the Asiatic Society of Bengal 1854 vol 23") |
 | ⭐⭐ | **Taneez, Jamil & Ramzan (2021)**, *Water, Air & Soil Pollution*, full PDF | Sampling details, depth or bathymetry if any, pollution numbers | Springer (paywalled) / ResearchGate request to the authors |
@@ -41,6 +41,7 @@ All claims are in `DATASET.csv`.
 | ⭐ | **Hindko or Gujri recordings of the legend** (Radio Pakistan Abbottabad, PTV regional) | Archival local voices | Radio Pakistan archives |
 
 ## D. Already verified (no action needed)
+- **1895 Intelligence Branch report** (Mason), read in full: Naran was a camping ground called "Narang"; floods in July 1893 destroyed nearly all bridges; **no legend** (the lake text is copied from 1883–84). The legend's first written appearance stays **1907**.
 - The 1907 local legend.
 - The 2007 UNESCO version.
 - The 1883–84 attestation of the name.
