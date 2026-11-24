@@ -21,6 +21,14 @@ html,body{margin:0;background:#000}
 const S=document.getElementById('stage');
 function E(t,c,css,h,p){const e=document.createElement(t);if(c)e.className=c;if(css)e.style.cssText=css;if(h!=null)e.innerHTML=h;(p||S).appendChild(e);return e}
 function scrim(l,t,w,h,a){return E('div','abs',`left:${l}px;top:${t}px;width:${w}px;height:${h}px;background:radial-gradient(ellipse at 50% 50%,rgba(3,5,12,${a||.62}) 0%,rgba(3,5,12,${(a||.62)*.55}) 45%,rgba(3,5,12,0) 72%);pointer-events:none`)}
+function desk(){S.style.background='radial-gradient(ellipse at 40% 35%,#3a2a1a 0%,#120c07 60%,#050302 100%)';}
+function doc(src,x,y,w,rot,marks,sep){const ar=src.ar;const h=w*ar;
+  const pg=E('div','abs',`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${sep||'#efe6cf'};transform:rotate(${rot}deg);box-shadow:-18px 30px 60px rgba(0,0,0,.75);padding:0`);
+  const im=E('img','abs',`left:0;top:0;width:${w}px;height:${h}px;mix-blend-mode:multiply;filter:sepia(.5) contrast(1.05)`,null,pg);im.src=src.f;
+  (marks||[]).forEach(m=>E('div','abs',`left:${m[0]*w}px;top:${(m[1]-.045)*h}px;width:${(m[2]-m[0])*w}px;height:${.09*h}px;background:rgba(240,190,60,.55);mix-blend-mode:multiply;filter:url(#rough);border-radius:3px`,null,pg));
+  E('div','abs',`inset:0;background:linear-gradient(120deg,rgba(255,220,160,.18),rgba(0,0,0,0) 50%,rgba(40,20,0,.28));pointer-events:none`,null,pg);return pg;}
+function lamp(x,y){E('div','abs',`inset:0;background:radial-gradient(circle at ${x}px ${y}px,rgba(255,180,90,.20) 0%,rgba(0,0,0,0) 40%,rgba(0,0,0,.55) 90%);pointer-events:none`);}
+function cap(t,sub,right){scrim(right?1000:-100,860,1100,300,.65);E('div','abs ur',`${right?'right':'left'}:70px;bottom:40px;font-size:52px;color:#FFE7B8;text-shadow:0 3px 12px #000;text-align:${right?'right':'left'}`,t+(sub?`<div style="font:20px Elite;color:rgba(230,215,185,.85);direction:ltr;margin-top:4px">${sub}</div>`:''));}
 function grain(){const c=document.createElement('canvas');c.width=960;c.height=540;c.className='grain';c.style.width='1920px';c.style.height='1080px';const g=c.getContext('2d'),im=g.createImageData(960,540);let s=9;for(let i=0;i<im.data.length;i+=4){s=(s*1103515245+12345)&0x7fffffff;const v=128+((s/0x7fffffff)-.5)*120;im.data[i]=im.data[i+1]=im.data[i+2]=v;im.data[i+3]=255}g.putImageData(im,0,0);S.appendChild(c)}
 const SC={
 R07_flood(){E('img','bg',null).src='out/bg_flood.png';
@@ -47,6 +55,71 @@ R06b_map(){S.style.background='#120c07';
   E('div','abs',`inset:0;background:radial-gradient(ellipse at 55% 45%,rgba(255,200,130,.10),rgba(0,0,0,0) 45%,rgba(20,10,0,.55) 100%);pointer-events:none`);
   scrim(1250,-60,800,260,.55);E('div','abs ur',`right:60px;top:40px;font-size:58px;color:#FFE7B8;text-shadow:0 3px 12px #000`,'ایک داستان کا سفر');
   E('div','credit',null,'Map: Imperial Gazetteer Atlas of India, 1908, Plate 2 (public domain; scan restored) · route drawn by us');grain();},
+R11_unesco(){desk();doc({f:'out/unesco_412.png',ar:715/2550},200,170,1520,-1.5,[[.205,.795,.598],[.205,.915,.585]],'#f4f1ea');lamp(500,300);
+  cap('سو سال بعد… وہی دیو، وہی ڈوبتا ناران','UNESCO / Hazara University, Kaghan cultural survey, 2006–07 · p. 36',true);
+  E('div','credit',null,'UNESCO Islamabad report (Prof. Ihsan Ali, Hazara University) · excerpt for commentary');grain();},
+R12_naran(){desk();
+  const ph=E('img','abs','left:1010px;top:110px;width:860px;height:640px;object-fit:cover;filter:sepia(.15) saturate(.8) brightness(.85) contrast(1.05);box-shadow:0 30px 70px rgba(0,0,0,.8);transform:rotate(2deg);border:14px solid #ece4d2');ph.src='out/naran_today.jpg';
+  doc({f:'out/mason_head.png',ar:410/1894},70,120,880,-2.2,[],'#f2ecdf');
+  doc({f:'out/mason_narang.png',ar:598/1894},70,330,880,-1.4,[[.23,.957,.6]],'#f2ecdf');lamp(450,500);
+  E('div','abs ur',`left:1040px;top:770px;width:820px;text-align:center;font-size:40px;color:#EFE3C6;text-shadow:0 3px 10px #000`,'ناران آج');
+  E('div','abs',`left:80px;top:660px;width:880px;text-align:right`,`<div class="ur" style="font-size:44px;color:#EFE3C6;text-shadow:0 3px 10px #000">1895: "نارنگ" — بس ایک پڑاؤ، گھاس سے بھرا</div><div style="font:20px Elite;color:rgba(230,215,185,.85);margin-top:6px">Mason, Report on Kaghan, 1895 · Route No. 1, p. 87</div>`);
+  E('div','credit',null,'Report scan: Intelligence Branch 1895 (public domain) · photo: Pexels (Faiz ur Rehman)');grain();},
+R13_sar(){desk();doc({f:'out/p205_sar.png',ar:320/1358},230,180,1460,-1.2,[[.26,.495,.53]]);lamp(900,300);
+  cap('"سَر" یعنی جھیل','Gazetteer of the Hazara District, 1907 · p. 205',true);
+  E('div','credit',null,'Scan: archive.org (Digital Library of India) · public domain');grain();},
+R14_dawn(){desk();const c=E('div','abs',`left:520px;top:230px;width:880px;height:520px;background:#efe6cf;transform:rotate(-1deg);box-shadow:-18px 30px 60px rgba(0,0,0,.75)`);
+  
+  E('div','abs elite',`left:60px;top:50px;font-size:26px;color:#5b4630`,'SOURCE NOTE',c);E('div','abs',`left:60px;top:95px;width:760px;height:2px;background:#6b553a;opacity:.5`,null,c);
+  E('div','abs elite',`left:60px;top:125px;font-size:30px;color:#2a2016;line-height:1.5`,'Dawn · 26 June 2005<br>Dateline: Mansehra, June 25',c);
+  E('div','abs ur',`right:60px;top:240px;width:760px;text-align:right;font-size:40px;color:#2a2016;line-height:1.9`,'برف پگھلنے سے جھیل کناروں سے باہر نکلی؛ مسجدوں کے لاؤڈ اسپیکر سے اعلان ہوئے، لوگ گھر چھوڑ کر بھاگے۔ کوئی جانی نقصان نہیں ہوا۔',c);
+  lamp(700,350);E('div','credit',null,'Summary of a published news report · dawn.com/news/145184');grain();},
+R15_dream(){E('img','bg',null).src='out/bg_dream.png';scrim(1000,820,1100,320,.7);E('div','abs ur',`right:70px;bottom:40px;font-size:56px;color:#FFE7B8;text-shadow:0 3px 12px #000`,'دلّی کے ایک شہزادے نے خواب میں ایک پری دیکھی…');E('div','credit',null,'Photo: Pexels (Alisa Skripina) · light composite ours');grain();},
+R16_years(){E('img','bg',null).src='out/bg_years.png';scrim(560,-60,800,300,.6);E('div','abs ur',`left:0;right:0;top:30px;text-align:center;font-size:66px;color:#FFE7B8;text-shadow:0 3px 14px #000`,'بارہ برس… موسم آئے، موسم گئے');
+  E('div','abs ur',`left:60px;bottom:40px;font-size:40px;color:#fff;text-shadow:0 2px 10px #000`,'گرمیاں');E('div','abs ur',`right:60px;bottom:40px;font-size:40px;color:#fff;text-shadow:0 2px 10px #000`,'سردیاں: جمی ہوئی جھیل');
+  E('div','credit',null,'Photos: Pexels (Sohail Raza; Zartaj Khan)');grain();},
+R17_clothes(){E('img','bg',null).src='out/bg_clothes.png';scrim(-100,820,1200,320,.7);E('div','abs ur',`left:70px;bottom:40px;font-size:54px;color:#FFE7B8;text-shadow:0 3px 12px #000`,'…اور شہزادے نے ملکہ کا لباس اُٹھا لیا');E('div','credit',null,'Stream: Pexels (Afaq Siddiqui) · silk: Pexels (Hanna Pad) · composite ours');grain();},
+R18_belief(){E('img','bg',null).src='out/bg_belief.png';scrim(-100,-60,1300,300,.6);E('div','abs ur',`left:70px;top:30px;font-size:54px;color:#FFE7B8;text-shadow:0 3px 12px #000`,'پریوں پر یقین… آج بھی زندہ ہے');E('div','credit',null,'Footage: Pexels (Taner Soyler) · graded, lights ours');grain();},
+R19_ending(){E('img','bg',null).src='out/bg_ending.png';scrim(1000,-60,1100,320,.6);E('div','abs ur',`right:70px;top:30px;font-size:58px;color:#FFE7B8;text-shadow:0 3px 12px #000`,'کیا آپ رات کو اِس جھیل کے کنارے رُکتے؟');E('div','credit',null,'Photo: Pexels (Muhammad Ayyan) · graded to night');grain();},
+R20_next(){S.style.background='#050403';const c=E('img','abs','left:-720px;top:-60px;width:1400px;height:1200px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  E('div','abs ur',`left:0;right:0;top:330px;text-align:center;font-size:46px;color:#d8c9a6`,'یہ داستان یہاں تمام ہوئی');
+  E('div','abs ur gold',`left:0;right:0;top:420px;text-align:center;font-size:120px;line-height:1.6`,'اگلی محفل: سسی پنوں');
+  E('div','abs en',`left:0;right:0;top:700px;text-align:center;font:600 18px Inter;letter-spacing:.25em;color:#8b7d63`,'SURAAGH NAMA · NEXT SITTING');grain();},
+C_S1(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'پہلی نشست',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'ایک سچی رات',p);grain();},
+C_S1b(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'داستان',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'تو حاضرین… ہوا یوں',p);grain();},
+C_S2(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'دوسری نشست',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'داستان کے راوی',p);grain();},
+C_S3(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'تیسری نشست',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'مسافر داستان',p);grain();},
+C_S4(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'چوتھی نشست',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'پہاڑوں کی امانت',p);grain();},
+C_S5(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'پانچویں نشست',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'اصلی دیو',p);grain();},
+C_S6(){S.style.background='#060403';const c=E('img','abs','left:-640px;top:-40px;width:1300px;height:1160px;object-fit:cover;mix-blend-mode:screen;filter:contrast(2.2) brightness(.6);-webkit-mask-image:radial-gradient(ellipse 50% 55% at 45% 45%,#000 40%,transparent 100%)');c.src='out/candle.png';
+  const p=E('div','abs','left:700px;top:300px;width:700px;height:460px;transform:rotate(-1.2deg);box-shadow:-20px 30px 70px rgba(0,0,0,.85)');const pi=E('img','abs','left:0;top:0;width:700px;height:460px;object-fit:cover;filter:brightness(.92)',null,p);pi.src='out/paper.jpg';
+  E('div','abs',`inset:0;background:radial-gradient(ellipse at 15% 40%,rgba(255,180,90,.25),rgba(0,0,0,0) 55%),linear-gradient(90deg,rgba(0,0,0,0) 50%,rgba(0,0,0,.35))`,null,p);
+  E('div','abs ur',`left:0;right:0;top:70px;text-align:center;font-size:104px;color:#2c1608;line-height:1.6;filter:url(#rough)`,'آخری نشست',p);
+  E('div','abs ur',`left:0;right:0;top:270px;text-align:center;font-size:46px;color:#7a2418;font-weight:400;filter:url(#rough)`,'شام، اور رخصت',p);grain();},
 R04_fairies(){E('img','bg',null).src='out/R04_fairies_real.png';E('div','credit',null,'Plate: Pixabay (u_hjie4wmvke) · graded day-for-night');},
 R02_title(){E('img','bg','filter:brightness(1.05)').src='out/bg_wide_night.png';E('div','abs','inset:0;background:linear-gradient(180deg,rgba(0,0,0,.45),rgba(0,0,0,0) 45%,rgba(0,0,0,.35))');scrim(260,0,1400,620,.7);
   E('div','abs ur',`left:0;right:0;top:60px;text-align:center;font-size:44px;color:rgba(236,226,200,.85);font-weight:400;text-shadow:0 2px 12px #000`,'سراغ نامہ کی داستان');

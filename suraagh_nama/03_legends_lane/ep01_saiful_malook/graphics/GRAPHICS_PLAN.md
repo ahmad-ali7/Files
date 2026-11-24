@@ -101,3 +101,18 @@ Ahmad's feedback: the drawn frames looked machine-made. **Every frame now starts
 | R08 moraine | Real footage | Hand-drawn line |
 | R09 demon | Real lake footage, plus **real storm sky and lightning** (Pexels, Pixabay) | A demon shape **inside the storm cloud**, with an edge lit only by the lightning, and ember eyes |
 | R10 thumbnail | Night lake | A torn strip of the real 1907 page |
+
+## Batch 3 crafts (stills, ready for animation)
+| Frame | Real base | Fantasy or treatment |
+|---|---|---|
+| R15 dream | Moonlit arch with curtains (Pexels) | The fairy as a drift of light in the window |
+| R16 twelve years | Summer lake (Pexels) and the **frozen lake in winter** (Pexels) | Split screen, later a cross-dissolve |
+| R17 stolen clothes | A real mountain stream (Pexels), graded to night | White silk draped on a rock; fairy lights fleeing |
+| R18 fairy belief | Fog over a mountain valley (Pexels video), graded to night | Lights hidden inside the mist |
+| R19 ending | Tents at the lake (Pexels; people cropped out), graded to night | Tent lamps; the last fairy lights fading |
+| R20 next sitting | Real candle footage | "اگلی محفل: سسی پنوں" |
+| R11 UNESCO | Real report page 36 | Highlighter: "smashed the embankment… flooded Naran", "cave under a mound of graves" |
+| R12 Naran 1895 / today | Real 1895 page ("excellent camping-ground at Narang") and a photo of Naran today | — |
+| R13 "sar" | Real 1907 page 205 | Highlighter: "(sar meaning lake)" |
+| R14 Dawn 2005 | Our source-note card: a summary, not an imitation newspaper | — |
+| C_S1 … C_S6 | Real paper and real candle | The seven sitting cards, in ink |
