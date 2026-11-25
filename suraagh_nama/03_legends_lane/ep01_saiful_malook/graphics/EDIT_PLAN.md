@@ -9,14 +9,14 @@ Each part's clips are scaled to fit the real length of its ElevenLabs file. The 
 | P02 | Loudspeaker | O3_naran_night (1) | PA distortion, dogs barking far away |
 | P03 | Narrator | O3_naran_night (1) → R14_dawn (1.2) → R09_demon (1.2, no text) → R02_title (1.5) | Footsteps and running water, then silence for the title |
 | — | — | C_S1b "داستان" (card) | Candle |
-| P04 | Narrator | R15_dream (2) → R03_astro (1.5) | **No music** (dastan); night crickets |
+| P04 | Narrator | R15_dream (1) → **PA1_badal_dream** (1.6), on "چہرہ ایسا کہ…" → R03_astro (1.2) | **No music** (dastan); night crickets |
 | P05 | Astrologer | R03_astro (1) | Candle |
-| P06 | Narrator | R16_years (2) → R04_fairies (3) → R17_clothes (1.5) | Water; faint bells on the lights |
-| P07 | Fairy | R17_clothes (1) | Water |
+| P06 | Narrator | **PA5_prince** (1.2) → R16_years (1.2) → **PA2_descent** (1.4) → **PA3_lake_apparition** (2) → R04_fairies (0.8) → **PA4_clothes** (1.2) | Water; faint bells on the lights; snow wind under PA5 |
+| P07 | Fairy | PA4_clothes (1) | Water |
 | P08 | Prince | R17_clothes (1) | Water |
 | P09 | Narrator | R09_demon (1) | Thunder far away |
 | P10 | Demon | R09_demon (1), **CUT** on the lightning strike | Thunder close |
-| P11 | Narrator | R07_flood (1) | Rushing water, then silence |
+| P11 | Narrator | R07_flood (1.2) → **PA6_escape** (1), on "شہزادہ اور پری ایک پہاڑی پر…" | Rushing water, then silence |
 | — | — | C_S2 | Candle |
 | P12 | Narrator | R05_page (1.3) → R12_naran (1.3) → R11_unesco (1.4) | Paper, room tone |
 | P13 | Narrator | R11_unesco (1) | — |
@@ -29,7 +29,7 @@ Each part's clips are scaled to fit the real length of its ElevenLabs file. The 
 | — | — | C_S5 | Candle |
 | P18 | Narrator | R08_moraine (1.4) → R21_events (1.4) → R07_flood (0.6, no text) | Wind; rumble under "یہ دیو سوتا نہیں" |
 | — | — | C_S6 | Candle |
-| P19 | Narrator | R19_ending (1) | Night wind, tent canvas |
+| P19 | Narrator | R19_ending (1) → **PA7_dance** (1.2), on "وہ آج بھی راتوں کو گھاس پر ناچنے…" | Night wind, tent canvas, faint bells |
 | P20 | Verse (Ahmad) | V2_verse (1) | Music bed |
 | P21 | Narrator | R19_ending (1) → R20_next (0.8) | The candle goes out at the end |
 
