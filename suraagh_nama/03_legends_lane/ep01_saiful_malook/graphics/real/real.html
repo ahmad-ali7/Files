@@ -9,7 +9,7 @@ html,body{margin:0;background:#000}
 .abs{position:absolute}.ur{font-family:Nastaliq;direction:rtl;font-weight:700;line-height:2}
 .bg{position:absolute;inset:0;width:1920px;height:1080px;object-fit:cover}
 .grain{position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:.22}
-.gold{background:linear-gradient(180deg,#f7e6b5 0%,#d9a441 45%,#a8761f 55%,#f1d08a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 1px rgba(0,0,0,.9)) drop-shadow(0 8px 24px rgba(0,0,0,.8))}
+.gold{padding-bottom:.45em;background:linear-gradient(180deg,#f7e6b5 0%,#d9a441 45%,#a8761f 55%,#f1d08a 100%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 2px 1px rgba(0,0,0,.9)) drop-shadow(0 8px 24px rgba(0,0,0,.8))}
 .credit{position:absolute;right:28px;bottom:20px;font:13px Inter;color:rgba(230,230,230,.55);letter-spacing:.06em}
 </style></head><body><div id="stage"></div>
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -20,7 +20,7 @@ html,body{margin:0;background:#000}
 <script>
 const S=document.getElementById('stage');
 function E(t,c,css,h,p){const e=document.createElement(t);if(c)e.className=c;if(css)e.style.cssText=css;if(h!=null)e.innerHTML=h;(p||S).appendChild(e);return e}
-function scrim(l,t,w,h,a){return E('div','abs',`left:${l}px;top:${t}px;width:${w}px;height:${h}px;background:radial-gradient(ellipse at 50% 50%,rgba(3,5,12,${a||.62}) 0%,rgba(3,5,12,${(a||.62)*.55}) 45%,rgba(3,5,12,0) 72%);pointer-events:none`)}
+function scrim(l,t,w,h,a){return E('div','abs scrim',`left:${l}px;top:${t}px;width:${w}px;height:${h}px;background:radial-gradient(ellipse at 50% 50%,rgba(3,5,12,${a||.62}) 0%,rgba(3,5,12,${(a||.62)*.55}) 45%,rgba(3,5,12,0) 72%);pointer-events:none`)}
 function desk(){S.style.background='radial-gradient(ellipse at 40% 35%,#3a2a1a 0%,#120c07 60%,#050302 100%)';}
 function doc(src,x,y,w,rot,marks,sep){const ar=src.ar;const h=w*ar;
   const pg=E('div','abs',`left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:${sep||'#efe6cf'};transform:rotate(${rot}deg);box-shadow:-18px 30px 60px rgba(0,0,0,.75);padding:0`);
@@ -176,6 +176,10 @@ R10_thumb(){E('img','bg','filter:brightness(1.15)').src='out/R04_fairies_real.pn
   const si=E('img','abs','left:0;top:0;width:840px;height:62px;object-fit:cover;filter:sepia(.6) contrast(1.1)',null,strip);si.src='out/strip_bigcity.png';
   E('div','abs ur',`left:80px;top:590px;font-size:100px;color:#F4B35E;text-shadow:0 5px 0 #000`,'سچ یا داستان؟');}
 };
-window.setup=async n=>{S.innerHTML='';S.style.background='#000';SC[n]();if(window.TEXTONLY){S.querySelectorAll('img.bg').forEach(i=>i.style.visibility='hidden');S.querySelectorAll('canvas.grain').forEach(c=>c.remove());S.style.background='transparent';document.body.style.background='transparent';document.documentElement.style.background='transparent';}await document.fonts.ready;await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));return {dur:1}};
+window.setup=async n=>{S.innerHTML='';S.style.background='#000';SC[n]();const isCap=el=>{if(el.classList.contains('scrim')||el.classList.contains('credit')||el.classList.contains('gold'))return true;if(!(el.textContent||'').trim())return false;if(el.querySelector('img,canvas'))return false;const cs=getComputedStyle(el);return cs.backgroundImage==='none'&&cs.backgroundColor==='rgba(0, 0, 0, 0)';};
+  const kids=[...S.children].filter(el=>!(el.tagName==='CANVAS'&&el.classList.contains('grain'))&&el.id!=='vig');
+  if(window.MODE==='textonly'){kids.forEach(el=>{if(!isCap(el))el.style.visibility='hidden';});S.querySelectorAll('canvas.grain,#vig').forEach(c=>c.remove());S.style.background='transparent';document.body.style.background='transparent';document.documentElement.style.background='transparent';
+    const wrap=document.createElement('div');wrap.style.cssText='position:absolute;inset:0;transform:scale(.94);transform-origin:50% 50%';[...S.children].forEach(c=>wrap.appendChild(c));S.appendChild(wrap);}
+  if(window.MODE==='notext'){kids.forEach(el=>{if(isCap(el))el.style.visibility='hidden';});}await document.fonts.ready;await Promise.all([...document.images].map(i=>i.complete?1:new Promise(r=>{i.onload=i.onerror=r})));return {dur:1}};
 window.renderFrame=()=>{};
 </script></body></html>

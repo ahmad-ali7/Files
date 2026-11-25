@@ -29,12 +29,13 @@ def comp_text(f, T, t, t0=1.0, t1=2.0, mask=None):
     return f * (1 - a) + rgb * a
 
 def still(name, src, dur=9, z1=1.06, dx=0, dy=0, flicker=0.0, grain=.03):
-    big = big_of(png(src)); w = Writer(f'clips/{name}.mp4', FPS); r = np.random.default_rng(1)
+    """camera moves the BACKGROUND layer only; the text layer (safe-margin) stays fixed on top."""
+    big = big_of(png(f'out/B_{name}.png')); T = text_layer(name); w = Writer(f'clips/{name}.mp4', FPS); r = np.random.default_rng(1)
     for k in range(int(dur * FPS)):
         t = k / FPS
         f = cam_crop(big, t, dur, 1.0, z1, dx, dy)
         if flicker: f = f * (1 + flicker * (np.sin(t * 9) * .5 + np.sin(t * 23) * .3 + r.normal(0, .3)))
-        f *= ease(t / .6) * ease((dur - t) / .6) * 0 + 1   # cuts handled in the edit
+        f = comp_text(f, T, t, 0.0, 0.5)
         w.add(film(f, k, grain=grain, vign=.25, halation=.1))
     w.close()
 
@@ -63,7 +64,9 @@ def j_naran_night():
         sm = craft.sky_mask(img)
         prev = sm if prev is None else prev * .85 + sm * .15
         lum = img.mean(2, keepdims=True)
-        g = (img * .3 + lum * .7) * .27 * np.array([.78, .86, 1.0])
+        g = (img * .3 + lum * .7) * .40 * np.array([.78, .86, 1.0])
+        sat = img.max(2, keepdims=True) - img.min(2, keepdims=True)
+        g = g + craft.smooth(lum, .45, .8) * craft.smooth(.18 - sat, 0, .12) * (1 - prev[..., None]) * np.array([.22, .25, .32])
         g = np.power(np.clip(g, 0, 1), 1.1)
         yy = np.linspace(0, 1, H)[:, None, None]
         s = np.array([.02, .035, .09]) * (1 - yy) + np.array([.07, .10, .20]) * yy + craft.smooth(lum, .7, .98) * .08
@@ -87,7 +90,7 @@ def j_demon():
         t = k / FPS
         fl = sum(a * np.exp(-((t - t0) / .07) ** 2) + a * .35 * np.exp(-((t - t0 - .12) / .18) ** 2) for t0, a in flashes)
         reveal = ease((t - 4.6) / 2.2)
-        S = (S_storm * (1 - reveal) + S_dem * reveal) * (.6 + .8 * fl) + (rim * fl * reveal)[..., None] * np.array([.62, .58, .85]) * 1.2
+        S = (S_storm * (1 - reveal) + S_dem * reveal) * (.6 + .8 * fl) + (rim * fl * reveal)[..., None] * np.array([.62, .58, .85]) * .55
         gr = ground * (1 + fl * .6)
         f = gr * (1 - sky[..., None]) + S * sky[..., None]
         w.add(film(comp_text(f, T, t, 7.2, 8.2), k, grain=.045, vign=.6, halation=.45))
@@ -150,6 +153,10 @@ def j_ending(): overlay_still('R19_ending', 'out/bg_ending.png', 'R19_ending', 1
 STILLS = {'R02_title': 8, 'R03_astro': 9, 'R05_page': 9, 'R06_photo1907': 9, 'R06b_map': 12, 'R08_moraine': 10, 'R11_unesco': 9,
           'R12_naran': 10, 'R13_sar': 7, 'R14_dawn': 8, 'R20_next': 8, 'C_S1': 4.5, 'C_S1b': 4.5, 'C_S2': 4.5, 'C_S3': 4.5,
           'C_S4': 4.5, 'C_S5': 4.5, 'C_S6': 4.5}
+def j_extra():
+    for n,d in {'V1_verse':8,'V2_verse':10,'R21_events':9}.items():
+        still(n, f'out/{n}.png', d, 1.05, flicker=.025 if n.startswith('V') else 0); print('still', n, flush=True)
+
 def j_stills():
     for n, d in STILLS.items():
         still(n, f'out/{n}.png', d, 1.05, flicker=.025 if n.startswith('C_') or n in ('R03_astro', 'R20_next', 'R05_page') else 0)
