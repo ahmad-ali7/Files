@@ -1,0 +1,163 @@
+"""Music beds and sound effects for Ep 1, placed against the timeline. Missing files are skipped, so a partial
+download still mixes. Music ducks under the voice."""
+import os, json, glob, numpy as np
+from scipy.ndimage import uniform_filter1d
+
+def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
+    segs = json.load(open('segs/timeline_r.json'))['segs'] if os.path.exists('segs/timeline_r.json') else json.load(open('segs/timeline.json'))['segs']
+    B = {b.get('name', b['kind'])[:3] if b['kind'] == 'vo' else (b.get('name') or 'pre'): b for b in blocks}
+    cards = [b for b in blocks if b['kind'] == 'card']
+    cache = {}
+    def snd(name):
+        if name not in cache:
+            fs = sorted(glob.glob(AUD + '**/' + name + '.*', recursive=True))
+            x = load_wav(fs[0]) if fs else None
+            if x is not None:                      # level-match: music to -20 dBFS RMS, effects to -18 (over their loud part)
+                a = np.abs(x).max(1); loud = x[a > np.percentile(a, 40)] if len(x) > SR else x
+                rms = np.sqrt((loud ** 2).mean()) + 1e-9
+                x = x * ((.10 if name.startswith('M') else .125) / rms)
+                pk = np.abs(x).max()
+                if pk > .98: x = x * (.98 / pk)
+            cache[name] = x
+            if not fs: print('  (missing)', name, flush=True)
+        return cache[name]
+    def seg_t(clip, nth=0):
+        hits = [s for s in segs if s['clip'].split('@')[0] == clip]
+        return hits[nth] if len(hits) > nth else None
+    def span(a, b): return B[a]['t'], B[b]['t'] + B[b]['d']
+
+    # ---------- music (each section's bed, ducked later) ----------
+    music = np.zeros_like(bed)
+    def xloop(x, n, xf):
+        """repeat x to n samples with an equal-power crossfade of xf samples at each seam"""
+        out = x.copy()
+        while len(out) < n:
+            k = min(xf, len(x) // 3, len(out) // 3); w = np.linspace(0, np.pi / 2, k)[:, None]
+            out = np.concatenate([out[:-k], out[-k:] * np.cos(w) + x[:k] * np.sin(w), x[k:]])
+        return out[:n]
+    def bed_music(name, t0, t1, gain, fin=2.0, fout=3.0, skip=0.0):
+        m = snd(name)
+        if m is None: return
+        m = m[at(skip):]
+        place(music, xloop(m, at(t1 - t0), at(4.0)), t0, gain, fin, fout)
+    t0, t1 = 0, B['P03']['t'] + B['P03']['d']
+    bed_music('M1_mystery_opening', 0.0, t1 + 1.5, .42, 3.0, 2.5)
+    bed_music('M2_romantic_dastan', B['P04']['t'] - 1.0, B['P08']['t'] + B['P08']['d'] + 1.0, .33, 3.0, 2.0)
+    bed_music('M3_storm_tension', B['P09']['t'] - .5, B['P11']['t'] + B['P11']['d'] * .7, .34, 1.5, 3.0)
+    bed_music('M4_investigation_bed', B['P12']['t'] - .5, B['C_S4']['t'] + 2.5, .32, 3.0, 2.5)
+    bed_music('M4_investigation_bed_alt', B['C_S4']['t'] + 1.0, B['P18']['t'] + B['P18']['d'] + .5, .34, 2.5, 3.0)
+    bed_music('M5_ending_mystic', B['C_S6']['t'] + 1.0, B['P21']['t'] + B['P21']['d'] + 2.0, .42, 3.0, 4.0)
+    # duck under the voice: -9 dB while speaking, smooth 0.35 s
+    env = np.abs(vo).max(1); env = uniform_filter1d(env, at(.35))
+    env = np.clip(env / (np.percentile(env[env > 1e-4], 70) + 1e-6), 0, 1)
+    env = uniform_filter1d(env, at(.5))
+    music *= (1 - .78 * env)[:, None]     # about -13 dB under the voice
+    bed += music
+    sfx_layer = np.zeros_like(bed); main_bed = bed; bed = sfx_layer     # effects go on their own layer (lightly ducked at the end)
+
+    # ---------- sound effects ----------
+    def fx(name, t, gain, dur=None, fin=.2, fout=.8, loop=False):
+        s = snd(name)
+        if s is None or t is None: return
+        if loop and dur is not None and len(s) < at(dur): s = xloop(s, at(dur), at(1.5))
+        place(bed, s, max(0, t), gain, fin, fout, dur=dur)
+    end = B['P21']['t'] + B['P21']['d']
+    # opening night
+    fx('S09_candle_fire', 0, .35, dur=B['P01']['t'] + B['P01']['d'] * .3, fin=.5, fout=2)
+    s = seg_t('O2_drop'); fx('S08_water_drop', s and s['t'] + 1.2, .8, dur=3)
+    s = seg_t('O3_naran_night'); o3 = s['t'] if s else B['P01']['t']
+    fx('S01_night_mountain_wind', o3 - 1, .35, dur=B['P03']['t'] + B['P03']['d'] * .4 - o3 + 1, fin=2, fout=2, loop=True)
+    fx('S02_river_stream', o3, .30, dur=B['P03']['t'] + B['P03']['d'] * .4 - o3, fin=2.5, fout=2, loop=True)
+    fx('S15_dog_barking_distant', B['P02']['t'] + .4, .30, dur=6, fin=.3, fout=2)
+    fx('S14_footsteps_running', B['P03']['t'] + .3, .45, dur=5, fin=.3, fout=1.5)
+    s = seg_t('R09_demon'); fx('S04_thunder_distant', s and s['t'] + .2, .55, dur=6)
+    s = seg_t('R02_title'); fx('S13_deep_boom', s and s['t'], .55, dur=4, fin=.01, fout=2.5)
+    # sitting cards: candle and a soft whoosh
+    for c in cards:
+        fx('S12_whoosh_soft', c['t'] - .25, .35, dur=1.5, fin=.05, fout=.6)
+        fx('S09_candle_fire', c['t'], .30, dur=c['d'], fin=.4, fout=1.0)
+    # dastan night
+    fx('S07_night_crickets', B['P04']['t'], .22, dur=B['P05']['t'] + B['P05']['d'] - B['P04']['t'], fin=2, fout=2, loop=True)
+    s = seg_t('PA5_prince'); fx('S16_snow_wind', s and s['t'], .35, dur=s and s['d'] + .6, fin=1, fout=1.2, loop=True)
+    s = seg_t('PA2_descent'); s2 = seg_t('R17_clothes')
+    if s and s2: fx('S02_river_stream', s['t'], .26, dur=s2['t'] + s2['d'] - s['t'], fin=2, fout=2, loop=True)
+    for c in ('PA2_descent', 'PA3_lake_apparition', 'R04_fairies'):
+        s = seg_t(c); fx('S11_magic_shimmer', s and s['t'] + .6, .35, dur=4, fin=.3, fout=2)
+    s = seg_t('R04_fairies'); fx('S17_bells_soft', s and s['t'] + 1.0, .16, dur=8, fin=.5, fout=2)
+    # the demon: storm under P09–P10, thunder on every lightning flash in the clip
+    fx('S05_heavy_rain', B['P09']['t'], .30, dur=B['P10']['t'] + B['P10']['d'] - B['P09']['t'] + 1, fin=2, fout=1.5, loop=True)
+    fx('S04_thunder_distant', B['P09']['t'] + .2, .5, dur=6)
+    FLASH = (1.6, 4.9, 8.2)
+    for s in segs:
+        if s['clip'].split('@')[0] != 'R09_demon' or 'from' not in s: continue
+        for f in FLASH:
+            tt = s['t'] + (f - s['from']) / s['sp']
+            if s['t'] <= tt < s['t'] + s['d']: fx('S03_thunder_close', tt - .05, .55 if s['t'] >= B['P10']['t'] else .22, dur=5, fin=.01, fout=2)
+    # the flood
+    s = seg_t('R07_flood')
+    if s:
+        fx('S13_deep_boom', s['t'], .7, dur=4, fin=.01, fout=2.5)
+        fx('S06_flood_rushing', s['t'], .55, dur=s['d'] + .6, fin=.4, fout=1.5, loop=True)
+    # evidence
+    for c in ('R05_page', 'R11_unesco'):
+        s = seg_t(c); fx('S10_paper_page', s and s['t'] + .3, .45, dur=2.5, fin=.02, fout=1)
+    fx('S01_night_mountain_wind', B['P17']['t'], .30, dur=B['P17']['d'], fin=2, fout=2, loop=True)
+    fx('S01_night_mountain_wind', B['P18']['t'], .25, dur=B['P18']['d'], fin=2, fout=2, loop=True)
+    t = phrase_time(['دیو', 'سوتا'], B['P18'])
+    fx('S13_deep_boom', t, .55, dur=4, fin=.01, fout=2.5)
+    s = seg_t('R07_flood', 1); fx('S06_flood_rushing', s and s['t'], .35, dur=s and s['d'] + .5, fin=.5, fout=1.5, loop=True)
+    # ending
+    fx('S01_night_mountain_wind', B['P19']['t'], .28, dur=end - B['P19']['t'] + 1, fin=2, fout=3, loop=True)
+    s = seg_t('PA7_dance')
+    if s:
+        fx('S11_magic_shimmer', s['t'] + .4, .30, dur=4, fin=.3, fout=2)
+        fx('S17_bells_soft', s['t'] + 2.0, .18, dur=8, fin=.5, fout=2.5)
+    fx('S09_candle_fire', end - 5, .30, dur=5, fin=1, fout=.25)      # the candle goes out
+    main_bed += sfx_layer * .8 * (1 - .6 * env)[:, None]             # effects step back ~10 dB under the voice
+    # ---------- voice-first rider (v2) ----------
+    # Every 10 ms: while Ahmad speaks, the whole bed (music + effects) is held at least MARGIN dB under his voice;
+    # in pauses longer than ~0.7 s it may swell back up to SWELL dB under the speech level; on chosen story beats it may
+    # come close to the voice. Gain falls fast (60 ms) and recovers slowly (450 ms), so nothing pumps.
+    hop = SR // 100
+    def lev(x):
+        e = (x ** 2).mean(1); n = len(e) // hop
+        r = np.sqrt(uniform_filter1d(e[:n * hop].reshape(n, hop).mean(1), 30) + 1e-12)   # 300 ms RMS
+        return 20 * np.log10(r)
+    Lv, Lb = lev(vo), lev(main_bed); n = min(len(Lv), len(Lb))
+    Lv, Lb = Lv[:n], Lb[:n]
+    active = Lv > -45
+    from scipy.ndimage import maximum_filter1d, minimum_filter1d
+    speaking = maximum_filter1d(active.astype(np.uint8), 70) > 0          # hold through gaps < 0.7 s
+    ref = np.where(active, Lv, np.nan)
+    # speech reference level: rolling median of active voice over 6 s
+    import pandas as pd
+    ref = pd.Series(ref).rolling(600, min_periods=20, center=True).median().bfill().ffill().fillna(-26).values
+    MARGIN, SWELL, BEAT = 15.0, 6.0, 3.0
+    allow = np.where(speaking, ref - MARGIN, ref - SWELL)
+    beats = []
+    s = seg_t('R02_title'); beats += [(s['t'] - .2, s['t'] + 3.2)] if s else []
+    beats += [(B['P10']['t'] - .1, B['P10']['t'] + B['P10']['d'] + 1.5)]
+    s = seg_t('R07_flood'); beats += [(s['t'] - .1, s['t'] + 2.5)] if s else []
+    for c in cards: beats += [(c['t'] + .2, c['t'] + c['d'] - .2)]
+    tt = np.arange(n) / 100
+    for a, b in beats:
+        m = (tt >= a) & (tt < b); allow[m] = np.maximum(allow[m], ref[m] - BEAT)
+    need = np.minimum(0, allow - Lb)                                     # dB of reduction needed
+    g = 10 ** (need / 20)
+    sm = np.empty_like(g); cur = 1.0                                     # fast attack, slow release
+    ka, kr = 1 - np.exp(-1 / 6), 1 - np.exp(-1 / 45)
+    for i in range(n):
+        cur += (g[i] - cur) * (ka if g[i] < cur else kr)
+        sm[i] = cur
+    gs = np.interp(np.arange(len(main_bed)) / SR, tt + .005, sm)
+    main_bed *= gs[:, None]
+    print(f'  rider: {np.mean(sm < .99) * 100:.0f}% of the time pulled down, deepest {20 * np.log10(sm.min() + 1e-9):.1f} dB', flush=True)
+
+def phrase_time(words, block):
+    """vo time of a phrase inside a part → timeline time."""
+    asr = json.load(open('../vo/asr.json'))
+    ws = [(s, w.strip()) for seg in asr for s, e, w in seg['w']]
+    for i in range(len(ws) - len(words) + 1):
+        if all(words[k] in ws[i + k][1] for k in range(len(words))) and block['s'] <= ws[i][0] < block['e']:
+            return block['t'] + ws[i][0] - block['s'] + .9
+    return None
