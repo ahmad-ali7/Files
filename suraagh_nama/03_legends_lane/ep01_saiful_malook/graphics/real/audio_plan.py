@@ -114,6 +114,44 @@ def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
         fx('S17_bells_soft', s['t'] + 2.0, .18, dur=8, fin=.5, fout=2.5)
     fx('S09_candle_fire', end - 5, .30, dur=5, fin=1, fout=.25)      # the candle goes out
     main_bed += sfx_layer * .8 * (1 - .6 * env)[:, None]             # effects step back ~10 dB under the voice
+    # ---------- voice-first rider (v2) ----------
+    # Every 10 ms: while Ahmad speaks, the whole bed (music + effects) is held at least MARGIN dB under his voice;
+    # in pauses longer than ~0.7 s it may swell back up to SWELL dB under the speech level; on chosen story beats it may
+    # come close to the voice. Gain falls fast (60 ms) and recovers slowly (450 ms), so nothing pumps.
+    hop = SR // 100
+    def lev(x):
+        e = (x ** 2).mean(1); n = len(e) // hop
+        r = np.sqrt(uniform_filter1d(e[:n * hop].reshape(n, hop).mean(1), 30) + 1e-12)   # 300 ms RMS
+        return 20 * np.log10(r)
+    Lv, Lb = lev(vo), lev(main_bed); n = min(len(Lv), len(Lb))
+    Lv, Lb = Lv[:n], Lb[:n]
+    active = Lv > -45
+    from scipy.ndimage import maximum_filter1d, minimum_filter1d
+    speaking = maximum_filter1d(active.astype(np.uint8), 70) > 0          # hold through gaps < 0.7 s
+    ref = np.where(active, Lv, np.nan)
+    # speech reference level: rolling median of active voice over 6 s
+    import pandas as pd
+    ref = pd.Series(ref).rolling(600, min_periods=20, center=True).median().bfill().ffill().fillna(-26).values
+    MARGIN, SWELL, BEAT = 15.0, 6.0, 3.0
+    allow = np.where(speaking, ref - MARGIN, ref - SWELL)
+    beats = []
+    s = seg_t('R02_title'); beats += [(s['t'] - .2, s['t'] + 3.2)] if s else []
+    beats += [(B['P10']['t'] - .1, B['P10']['t'] + B['P10']['d'] + 1.5)]
+    s = seg_t('R07_flood'); beats += [(s['t'] - .1, s['t'] + 2.5)] if s else []
+    for c in cards: beats += [(c['t'] + .2, c['t'] + c['d'] - .2)]
+    tt = np.arange(n) / 100
+    for a, b in beats:
+        m = (tt >= a) & (tt < b); allow[m] = np.maximum(allow[m], ref[m] - BEAT)
+    need = np.minimum(0, allow - Lb)                                     # dB of reduction needed
+    g = 10 ** (need / 20)
+    sm = np.empty_like(g); cur = 1.0                                     # fast attack, slow release
+    ka, kr = 1 - np.exp(-1 / 6), 1 - np.exp(-1 / 45)
+    for i in range(n):
+        cur += (g[i] - cur) * (ka if g[i] < cur else kr)
+        sm[i] = cur
+    gs = np.interp(np.arange(len(main_bed)) / SR, tt + .005, sm)
+    main_bed *= gs[:, None]
+    print(f'  rider: {np.mean(sm < .99) * 100:.0f}% of the time pulled down, deepest {20 * np.log10(sm.min() + 1e-9):.1f} dB', flush=True)
 
 def phrase_time(words, block):
     """vo time of a phrase inside a part → timeline time."""

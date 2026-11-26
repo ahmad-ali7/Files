@@ -116,6 +116,10 @@ def j_pa_lake():
         w.add(film(f, k, grain=.035, vign=.55, halation=.4))
     w.close()
 
+
+def j_pa_portrait(): painting('PA1b_badal_portrait', 'P01_badal_portrait', 8, 1.10, -40, 30, mbox=(300, 100, 1400, 1000), nm=60,
+                              mistband=(500, 1080), mist_s=.10)        # no caption: used in the Alf Laila sentence
+
 if __name__ == '__main__':
     for j in sys.argv[1:]:
         globals()['j_' + j](); print('done', j, flush=True)

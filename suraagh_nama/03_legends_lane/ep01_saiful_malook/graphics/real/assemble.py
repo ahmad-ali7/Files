@@ -2,7 +2,10 @@
 Usage: python3 assemble.py video|audio|mux|all"""
 import sys, os, json, subprocess, numpy as np
 sys.path.insert(0, '.')
-from anim_core import W, H, Writer
+from anim_core import Writer
+import anim_core
+PV = int(os.environ.get('PV', '0'))
+W, H = (854, 480) if PV else (1920, 1080)
 FPS = 25; D = 0.5               # dissolve length
 SR = 48000
 VO = '../vo/'
@@ -28,22 +31,25 @@ PLAN = [
     ('P10', [('R09_demon@8.15', 1, 'cut')]),   # cut straight onto a lightning flash
     ('P11', [('R07_flood', 1.2), ('PA6_escape', 1)]),
     ('card', 'C_S2'),
-    ('P12', [('R05_page', 1.3), ('R12_naran', 1.3), ('R11_unesco', 1.4)]),
-    ('P13', [('R11_unesco', 1)]),
+    # weights below are seconds, cut to the words (see vo_sync/parts.json and the ASR)
+    ('P12', [('R05_page', 15.4), ('N1_naran_day@2', 6.4), ('R12_naran', 10.0), ('N1_naran_day@12', 9.9), ('R11_unesco', 8.0)]),
+    ('P13', [('R11_unesco', 8.2), ('W1_lake_water@0', 4.7), ('PA5_prince@0', 7.9)]),
     ('card', 'C_S3'),
-    ('P14', [('R06b_map', 1)]),
-    ('P15', [('V1_verse', 1)]),
-    ('P16', [('R13_sar', 1), ('R06_photo1907', 1), ('R06b_map', .6)]),
+    ('P14', [('L1_lake_aerial@0', 5.6), ('R06c_route@0', 6.2), ('PA1b_badal_portrait@0', 6.8), ('R06c_route@6.2', 14.0), ('L2_lake_wide@0', 6.46)]),
+    ('P15', [('V1w_verse_water@0', 1)]),
+    ('P16', [('L2_lake_wide@8', 7.3), ('R13_sar', 5.7), ('R06_photo1907', 4.5), ('L3_lake_road@0', 6.2), ('PA3_lake_apparition@6', 2.6), ('PA4_clothes@0', 10.18)]),
     ('card', 'C_S4'),
-    ('P17', [('R18_belief', 1)]),
+    ('P17', [('R18_belief', 16.0), ('L1_lake_aerial@8', 7.5), ('S1_storm_clouds@0', 8.13)]),
     ('card', 'C_S5'),
-    ('P18', [('R08_moraine', 1.4), ('R21_events', 1.4), ('R07_flood@0', .6)]),
+    ('P18', [('L2_lake_wide@17', 3.8), ('R08_moraine', 9.2), ('R21_events', 18.2), ('R07_flood@0', 8.7), ('L2_lake_wide@24', 3.63)]),
     ('card', 'C_S6'),
     ('P19', [('R19_ending', 1), ('PA7_dance', 1.2)]),
     ('P20', [('V2_verse', 1)]),
     ('P21', [('R19_ending', 1), ('R20_next', .8)]),
 ]
-VIDEO_CLIPS = {'O1_lamp', 'O2_drop', 'O3_naran_night', 'R18_belief'}   # real footage: never slower than 0.6x
+VIDEO_CLIPS = {'O1_lamp', 'O2_drop', 'O3_naran_night', 'R18_belief', 'L1_lake_aerial', 'L2_lake_wide', 'L3_lake_road', 'W1_lake_water', 'N1_naran_day', 'S1_storm_clouds'}
+def cpath(name):   # v2 animated clips win over v1 stills
+    return ('clips_v2/' if os.path.exists('clips_v2/' + name + '.mp4') else CL) + name + '.mp4'   # real footage: never slower than 0.6x
 
 def dur_of(f):
     return float(subprocess.check_output(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', f]))
@@ -85,7 +91,7 @@ def tri(u, lo, hi):
 def plan_segments(segs):
     cursor = {}
     for i, s in enumerate(segs):
-        name = s['clip'].split('@')[0]; cd = dur_of(CL + name + '.mp4') - 1.0 / FPS
+        name = s['clip'].split('@')[0]; cd = dur_of(cpath(name)) - 1.0 / FPS
         need = s['d'] + (D if i < len(segs) - 1 and not segs[i + 1]['cut'] else 0)
         u0 = float(s['clip'].split('@')[1]) if '@' in s['clip'] else cursor.get(name, 0.0)
         lo = min(LO.get(name, 0.0 if name in VIDEO_CLIPS else 2.5), cd * .6)
@@ -100,7 +106,7 @@ _cache = {}
 def clip_frames(name):
     if name not in _cache:
         if len(_cache) >= 2: _cache.pop(next(iter(_cache)))
-        raw = subprocess.check_output(['ffmpeg', '-nostdin', '-loglevel', 'error', '-i', CL + name + '.mp4', '-vf', f'scale={W}:{H}',
+        raw = subprocess.check_output(['ffmpeg', '-nostdin', '-loglevel', 'error', '-i', cpath(name), '-vf', f'scale={W}:{H}',
                                        '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
         _cache[name] = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
     return _cache[name]
@@ -115,6 +121,7 @@ def seg_frames(s):
 
 def blend(segs, total, out='Ep1_video.mp4'):
     nD = int(D * FPS)
+    if PV: anim_core.W, anim_core.H = W, H
     w = Writer(out, FPS); N = int(round(total * FPS)); k = 0
     prev_tail = []
     for i, s in enumerate(segs):
@@ -209,9 +216,14 @@ def music_sfx(bed, blocks, vo):
     import audio_plan
     audio_plan.build(bed, blocks, vo, load_wav, place, at, SR, AUD)
 
-def mux(out='deliver/Ep1_Saiful_Malook_FULL_1080p.mp4'):
-    subprocess.run(['ffmpeg', '-nostdin', '-y', '-loglevel', 'error', '-i', 'Ep1_video.mp4', '-i', SEG + 'mix.wav', '-map', '0:v', '-map', '1:a',
-                    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '256k', '-shortest', '-movflags', '+faststart', out], check=True)
+def mux():
+    if PV:
+        src, out, ab = 'Ep1_video_480.mp4', 'deliver/Ep1_Saiful_Malook_v2_preview_480p.mp4', '128k'
+        vc = ['-c:v', 'libx264', '-crf', '24', '-preset', 'veryfast', '-maxrate', '1500k', '-bufsize', '3000k']
+    else:
+        src, out, ab, vc = 'Ep1_video.mp4', 'deliver/Ep1_Saiful_Malook_FULL_1080p.mp4', '256k', ['-c:v', 'copy']
+    subprocess.run(['ffmpeg', '-nostdin', '-y', '-loglevel', 'error', '-i', src, '-i', SEG + 'mix.wav', '-map', '0:v', '-map', '1:a', *vc,
+                    '-c:a', 'aac', '-b:a', ab, '-shortest', '-movflags', '+faststart', out], check=True)
     print('wrote', out, flush=True)
 
 if __name__ == '__main__':
@@ -220,6 +232,6 @@ if __name__ == '__main__':
     print(f'total {total:.1f} s, {len(segs)} segments', flush=True)
     what = sys.argv[1] if len(sys.argv) > 1 else 'all'
     if what in ('plan', 'video', 'all'): plan_segments(segs)
-    if what in ('video', 'all'): blend(segs, total)
+    if what in ('video', 'all'): blend(segs, total, 'Ep1_video_480.mp4' if PV else 'Ep1_video.mp4')
     if what in ('audio', 'all'): audio(blocks, total)
     if what in ('mux', 'all'): mux()
