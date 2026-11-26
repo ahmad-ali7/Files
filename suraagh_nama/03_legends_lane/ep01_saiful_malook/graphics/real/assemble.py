@@ -127,7 +127,7 @@ def blend(segs, total, out='Ep1_video.mp4'):
                 a = (j + 1) / (len(prev_tail) + 1); a = a * a * (3 - 2 * a)
                 f = prev_tail[j] * (1 - a) + f * a
             w.add(f / 255); k += 1; j += 1
-        prev_tail = [] if (i + 1 < len(segs) and segs[i + 1]['cut']) else [next(g) for _ in range(nD)]
+        prev_tail = [] if (i + 1 >= len(segs) or segs[i + 1]['cut']) else [next(g) for _ in range(nD)]
         if i % 5 == 0: print(f'blended {i}/{len(segs)}  frame {k}/{N}', flush=True)
     w.close()
 
@@ -179,14 +179,18 @@ def audio(blocks, total):
         role = b['name'].split('_', 1)[1]
         if role in FX:
             wet = fx(x, FX[role])
-            if role == 'LOUDSPEAKER': wet = wet * 0.9
-            x = wet
+            # loudness-match the effect to the dry read (echo filters lose 3–10 dB); PA and demon sit 1–2 dB hotter
+            r = lambda y: np.sqrt((y ** 2).mean()) + 1e-9
+            wet = wet * (r(x) / r(wet)) * {'LOUDSPEAKER': 1.12, 'DEMON': 1.25, 'ASTROLOGER': 1.3, 'PRINCE': 1.12}.get(role, 1.0)
+            pk = np.abs(wet).max()
+            x = wet * (.95 / pk) if pk > .95 else wet
         n = len(x); f = min(at(.02), n // 2)
         x[:f] *= np.linspace(0, 1, f)[:, None]; x[-f:] *= np.linspace(1, 0, f)[:, None]
         s = at(b['t']); vo[s:s + n] += x
     np.save(SEG + 'vo_track.npy', vo)
     bed = np.zeros_like(vo)
     music_sfx(bed, blocks, vo)
+    np.save(SEG + 'bed.npy', bed)
     mix = vo + bed
     raw = SEG + 'mix_raw.wav'
     subprocess.run(['ffmpeg', '-nostdin', '-y', '-loglevel', 'error', '-f', 'f32le', '-ar', str(SR), '-ac', '2', '-i', '-', raw],

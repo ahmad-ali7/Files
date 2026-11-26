@@ -11,7 +11,14 @@ def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
     def snd(name):
         if name not in cache:
             fs = sorted(glob.glob(AUD + '**/' + name + '.*', recursive=True))
-            cache[name] = load_wav(fs[0]) if fs else None
+            x = load_wav(fs[0]) if fs else None
+            if x is not None:                      # level-match: music to -20 dBFS RMS, effects to -18 (over their loud part)
+                a = np.abs(x).max(1); loud = x[a > np.percentile(a, 40)] if len(x) > SR else x
+                rms = np.sqrt((loud ** 2).mean()) + 1e-9
+                x = x * ((.10 if name.startswith('M') else .125) / rms)
+                pk = np.abs(x).max()
+                if pk > .98: x = x * (.98 / pk)
+            cache[name] = x
             if not fs: print('  (missing)', name, flush=True)
         return cache[name]
     def seg_t(clip, nth=0):
@@ -21,27 +28,39 @@ def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
 
     # ---------- music (each section's bed, ducked later) ----------
     music = np.zeros_like(bed)
-    def bed_music(name, t0, t1, gain, fin=2.0, fout=3.0):
+    def xloop(x, n, xf):
+        """repeat x to n samples with an equal-power crossfade of xf samples at each seam"""
+        out = x.copy()
+        while len(out) < n:
+            k = min(xf, len(x) // 3, len(out) // 3); w = np.linspace(0, np.pi / 2, k)[:, None]
+            out = np.concatenate([out[:-k], out[-k:] * np.cos(w) + x[:k] * np.sin(w), x[k:]])
+        return out[:n]
+    def bed_music(name, t0, t1, gain, fin=2.0, fout=3.0, skip=0.0):
         m = snd(name)
         if m is None: return
-        place(music, m, t0, gain, fin, fout, dur=t1 - t0, loop=True)
+        m = m[at(skip):]
+        place(music, xloop(m, at(t1 - t0), at(4.0)), t0, gain, fin, fout)
     t0, t1 = 0, B['P03']['t'] + B['P03']['d']
-    bed_music('M1_mystery_opening', 0.0, t1 + 1.5, .55, 3.0, 2.5)
-    bed_music('M2_romantic_dastan', B['P04']['t'] - 1.0, B['P08']['t'] + B['P08']['d'] + 1.0, .50, 3.0, 2.0)
-    bed_music('M3_storm_tension', B['P09']['t'] - .5, B['P11']['t'] + B['P11']['d'] * .7, .55, 1.5, 3.0)
-    bed_music('M4_investigation_bed', B['P12']['t'] - .5, B['P18']['t'] + B['P18']['d'] + .5, .42, 3.0, 3.0)
-    bed_music('M5_ending_mystic', B['C_S6']['t'] + 1.0, B['P21']['t'] + B['P21']['d'] + 2.0, .55, 3.0, 4.0)
+    bed_music('M1_mystery_opening', 0.0, t1 + 1.5, .42, 3.0, 2.5)
+    bed_music('M2_romantic_dastan', B['P04']['t'] - 1.0, B['P08']['t'] + B['P08']['d'] + 1.0, .33, 3.0, 2.0)
+    bed_music('M3_storm_tension', B['P09']['t'] - .5, B['P11']['t'] + B['P11']['d'] * .7, .34, 1.5, 3.0)
+    bed_music('M4_investigation_bed', B['P12']['t'] - .5, B['C_S4']['t'] + 2.5, .32, 3.0, 2.5)
+    bed_music('M4_investigation_bed_alt', B['C_S4']['t'] + 1.0, B['P18']['t'] + B['P18']['d'] + .5, .34, 2.5, 3.0)
+    bed_music('M5_ending_mystic', B['C_S6']['t'] + 1.0, B['P21']['t'] + B['P21']['d'] + 2.0, .42, 3.0, 4.0)
     # duck under the voice: -9 dB while speaking, smooth 0.35 s
     env = np.abs(vo).max(1); env = uniform_filter1d(env, at(.35))
     env = np.clip(env / (np.percentile(env[env > 1e-4], 70) + 1e-6), 0, 1)
     env = uniform_filter1d(env, at(.5))
-    music *= (1 - .65 * env)[:, None]
+    music *= (1 - .78 * env)[:, None]     # about -13 dB under the voice
     bed += music
+    sfx_layer = np.zeros_like(bed); main_bed = bed; bed = sfx_layer     # effects go on their own layer (lightly ducked at the end)
 
     # ---------- sound effects ----------
     def fx(name, t, gain, dur=None, fin=.2, fout=.8, loop=False):
         s = snd(name)
-        if s is not None and t is not None: place(bed, s, max(0, t), gain, fin, fout, dur=dur, loop=loop)
+        if s is None or t is None: return
+        if loop and dur is not None and len(s) < at(dur): s = xloop(s, at(dur), at(1.5))
+        place(bed, s, max(0, t), gain, fin, fout, dur=dur)
     end = B['P21']['t'] + B['P21']['d']
     # opening night
     fx('S09_candle_fire', 0, .35, dur=B['P01']['t'] + B['P01']['d'] * .3, fin=.5, fout=2)
@@ -64,7 +83,7 @@ def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
     if s and s2: fx('S02_river_stream', s['t'], .26, dur=s2['t'] + s2['d'] - s['t'], fin=2, fout=2, loop=True)
     for c in ('PA2_descent', 'PA3_lake_apparition', 'R04_fairies'):
         s = seg_t(c); fx('S11_magic_shimmer', s and s['t'] + .6, .35, dur=4, fin=.3, fout=2)
-    s = seg_t('R04_fairies'); fx('S17_bells_soft', s and s['t'], .18, dur=s and s['d'], fin=1, fout=1, loop=True)
+    s = seg_t('R04_fairies'); fx('S17_bells_soft', s and s['t'] + 1.0, .16, dur=8, fin=.5, fout=2)
     # the demon: storm under P09–P10, thunder on every lightning flash in the clip
     fx('S05_heavy_rain', B['P09']['t'], .30, dur=B['P10']['t'] + B['P10']['d'] - B['P09']['t'] + 1, fin=2, fout=1.5, loop=True)
     fx('S04_thunder_distant', B['P09']['t'] + .2, .5, dur=6)
@@ -73,7 +92,7 @@ def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
         if s['clip'].split('@')[0] != 'R09_demon' or 'from' not in s: continue
         for f in FLASH:
             tt = s['t'] + (f - s['from']) / s['sp']
-            if s['t'] <= tt < s['t'] + s['d']: fx('S03_thunder_close', tt - .05, .55 if s['t'] < B['P09']['t'] else .8, dur=5, fin=.01, fout=2)
+            if s['t'] <= tt < s['t'] + s['d']: fx('S03_thunder_close', tt - .05, .55 if s['t'] >= B['P10']['t'] else .22, dur=5, fin=.01, fout=2)
     # the flood
     s = seg_t('R07_flood')
     if s:
@@ -92,8 +111,9 @@ def build(bed, blocks, vo, load_wav, place, at, SR, AUD):
     s = seg_t('PA7_dance')
     if s:
         fx('S11_magic_shimmer', s['t'] + .4, .30, dur=4, fin=.3, fout=2)
-        fx('S17_bells_soft', s['t'], .20, dur=s['d'] + .5, fin=1.2, fout=1.5, loop=True)
+        fx('S17_bells_soft', s['t'] + 2.0, .18, dur=8, fin=.5, fout=2.5)
     fx('S09_candle_fire', end - 5, .30, dur=5, fin=1, fout=.25)      # the candle goes out
+    main_bed += sfx_layer * .8 * (1 - .6 * env)[:, None]             # effects step back ~10 dB under the voice
 
 def phrase_time(words, block):
     """vo time of a phrase inside a part → timeline time."""
