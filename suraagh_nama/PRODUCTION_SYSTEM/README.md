@@ -3,6 +3,11 @@
 A repeatable pipeline for making one episode: **Pakistan's legends, mysteries and their real places.**
 Built from Ep 1 (Saiful Malook). Reuse it; don't rebuild it.
 
+## ⭐ Start here: `CHANNEL_BIBLE.md`
+It is the **single source of truth** — mission, audience, voice, visual/audio identity, ethics, packaging, metrics.
+Every session (cloud or local) reads it **first**. Everything below serves it.
+New ideas come in through `EXTENDING.md`; they never quietly change the core.
+
 ## The core idea: think in the cloud, build on the machine
 
 | Phase | Where | Why |
@@ -18,18 +23,26 @@ small previews for the cloud to review. That review loop is what keeps quality h
 
 ```
 PRODUCTION_SYSTEM/
-├── README.md            ← you are here
+├── CHANNEL_BIBLE.md     ← ⭐ single source of truth (read first)
+├── EXTENDING.md         ← how to add new ideas/scenes/code without drifting
+├── README.md            ← you are here (the map)
 ├── WORKFLOW.md          ← the cloud↔local division + the review loop + repo/branch rules
 ├── RUNBOOK.md           ← the LOCAL session's step-by-step: BUILD_SPEC + assets → finished video
 ├── toolkit/             ← the reusable scripts (the real asset — proven on Ep 1)
 ├── templates/
 │   ├── BUILD_SPEC_TEMPLATE.md   ← fill one per episode in the cloud; hand to local
-│   ├── IMAGE_GEN_GUIDE.md       ← generating illustrations via Gemini in Chrome
+│   ├── IMAGE_GEN_GUIDE.md       ← illustrations via Gemini in Chrome
 │   ├── AUDIO_GUIDE.md           ← music + SFX from the YouTube Audio Library
 │   └── UPLOAD_GUIDE.md          ← YouTube upload steps (local session)
+├── creative/            ← the growing library (flexibility lives here)
+│   ├── SCENE_LIBRARY.md         ← catalog of scene types ↔ which script builds each
+│   └── IDEA_BACKLOG.md          ← ranked episode pipeline + scoring rubric
 └── reference/
     └── EP1_RETROSPECTIVE.md     ← what worked, what broke, lessons baked into the toolkit
 ```
+
+**Two layers, on purpose:** a stable **core** (CHANNEL_BIBLE + toolkit) you change rarely, and a growing
+**creative library** (`creative/`) you add to freely. That's what makes the system both consistent and flexible.
 
 ## The loop for every new episode
 
