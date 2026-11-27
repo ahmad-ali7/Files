@@ -72,6 +72,22 @@ are **not yet read**; claims from them stay flagged.)
 - **Caveats (OCR / unread):** "A.D. 1250" and "Bhambo Raja" are rough OCR — verify exact wording before on-screen quote.
   A possible pp.14–30 "Bhanbhorai founded Bhambor" + Sassi footnote was **not** verified — do not assert it yet.
 
+**What the PARTHICA 18 (2016) peer-reviewed report adds (Pak-Italian mission, READ — cite only, © do NOT show/commit):**
+- Hard, authoritative figures: Banbhore sits at the Indus delta mouth on the Gharo creek, **~30 km from today's
+  shoreline** (the sea really pulled back); citadel ringed by a wall with **47 circular towers + 8 rectangular
+  bastions**, an **artificial sweet-water lake** to the NE, harbour structures, workshops, warehouses; the whole
+  **~65 hectares**. A N–S **"Partition Wall"** splits the citadel in two (the temple/mosque halves).
+- **The Debal dispute, with the actual camps named** (via Kervran's survey): those who **denied** Banbhore = Daybul
+  (Debal) **or** the Greek **Barbarikon** of the *Periplus* — **H.M. Elliot, H. Haig, H.G. Raverty, H.T. Lambrick,
+  Henry Cousens**. Those who **argued it IS Daybul** — **L. Alcock, M. Rafique Mughal, F.A. Khan** (the systematic
+  1958–65 digs), backed by the great historian **N.A. Baloch**. The debate opened with Cousens' 1929 visit and
+  Majumdar's 1930 trenches and has never closed.
+- ⇒ **The city may have THREE names and we're sure of none:** **Barbarikon** (Greek/Roman delta port, Periplus),
+  **Debal/Daybul** (the Arab port Qasim stormed, 711), or **Bhambor / "Sassui-jo-Takar"** (the legend). One buried
+  city, three identities — a superb second mystery.
+- F.A. Khan's 1958–65 excavation was **"left only partially studied and published"** — i.e. the city still guards
+  its secrets. Good narration beat.
+
 **What the Debal article adds (modern view):**
 - Mosque with **Kufic inscriptions dated 727 CE and 906 CE**; if 727 is the build date, among the earliest mosques
   in the subcontinent (16 yrs after Qasim). Mosque plan 34×35 m. A wall split the city **east/west — a Shiva temple

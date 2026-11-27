@@ -63,3 +63,8 @@ The ⭐ items are the ones to get first.
 - A **confirmed, citable Sur Sassui verse** in Sindhi + translation — needs one of the §E books in hand.
 - **License-free visuals** of Bhambore ruins / Lasbela tomb / Thar desert — still to verify for the build (the §C PDFs
   and Sindh Culture Dept photos may be usable with credit; stock footage of the Sindh desert/Indus delta to be checked).
+
+## Copyright note on supplied PDFs
+- **Parthica 18 (2016)** Banbhore report (Felici, Fusaro, Manassero, Piacentini Fiorani et al.) — © Fabrizio Serra editore; reproduction barred. **Use facts + cite only; never show a page or commit the PDF.**
+- **Kot Diji booklet** — a *different* site (pre-Indus/Harappan, Khairpur). Not Sassi-Punnu; strong **future-episode** candidate (added to the idea backlog). Not used on screen for Ep 2.
+- On-screen archival document for Ep 2 stays the **public-domain Cousens 1929**.
