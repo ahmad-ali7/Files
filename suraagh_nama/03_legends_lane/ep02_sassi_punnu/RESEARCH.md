@@ -46,6 +46,27 @@ it may be **Debal**, the port Muhammad bin Qasim stormed in 711. So we chase two
 - **Debated:** Bhambore = Debal.
 - We present tradition *as* tradition ("داستان کہتی ہے…") and keep the proven facts separate — the brand's whole edge.
 
+## How the story travelled & got popular (the Ep-1 "travelling tale" beat) — DATED
+Unlike Saiful Malook, which travelled *into* Pakistan (Alf Laila → Persian → Deccan → Bengali → Punjabi),
+**Sassi-Punnu was born here** — in the Sindh–Makran desert — and spread *outward*. The written/sung chain, dated:
+
+| Date | Teller | Lang. | What (source) |
+|---|---|---|---|
+| set ~14th–16th c. | — | — | Traditionally placed in **late-medieval Sindh (Samma era, 1351–1524, capital Thatta)**; characters: the "Raja of Bhambore" and "Jam Aali, Baloch ruler of Kech". *(Setting is traditional, not documented.)* |
+| **c. 1463–1551** | **Qazi Qadan** | Sindhi | **The earliest known written mention** — and he is the **father of Sindhi poetry**. ⇒ the written tale is ~**500 years old**, and starts with the very first Sindhi poet. |
+| **c. 1536–1623** | **Shah Abdul Karim of Bulri** | Sindhi | Mentions it in his *Karim Jo Risalo*. He is **Bhittai's own great-great-grandfather** — the tale runs in Bhittai's family line of poets. |
+| **1689–1752** | **Shah Abdul Latif Bhittai** | Sindhi | *Sur Sassui* in the *Shah Jo Risalo*; Sassui becomes one of the **Seven Queens**; the Sufi-allegory version that made it immortal. |
+| **18th c.** | **Hashim Shah** | Punjabi | *Qissa Sassi Punnun*; his Sassi dies crossing the desert. |
+| **19th c.** | **Fazal Shah Sayyad** (Lahore) | Punjabi | The **most popular Punjabi rendition**. |
+| modern | Ram Panjwani (Sindhi play); films 1954/1983/2004 | — | Kept alive on stage and screen. |
+
+**Why it got popular (4 reasons):** (1) rooted in **real named places** (Bhambore, Kech) so it felt true; (2) **Bhittai made it
+sacred** — one of the Seven Queens, her desert walk read as the **soul's longing for God**; (3) it is **continuously sung**
+at Sufi shrines, above all at **Bhit Shah during Bhittai's urs**; (4) it crossed **Sindhi, Punjabi, Balochi, Siraiki** —
+four peoples each claim it. In Sindh it's one of the **seven** great romances; in Punjab, one of the **four**.
+*(Poet life-dates are their established dates, attached by us; the Wikipedia article names the tellers but not the years.
+Qazi Qadan as "earliest mention" is per the English Wikipedia Origins section — supersedes the earlier garbled "Qadir Shah".)*
+
 ## ✅ Primary-source reading (ACTUALLY READ — 2026-11-27)
 Read verbatim: **Cousens 1929, the Bhambor chapter (pp. 80–81)** via the archive.org full text, and the
 LiveHistoryIndia Debal article in full. (The paid reports — F.A. Khan, Parthica — and Cousens pp. 5–30/46–63
