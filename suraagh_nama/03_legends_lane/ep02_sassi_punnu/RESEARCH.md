@@ -36,14 +36,49 @@ it may be **Debal**, the port Muhammad bin Qasim stormed in 711. So we chase two
 ## The verse spine (like Ep 1's Mian Muhammad Bakhsh)
 - **Shah Abdul Latif Bhittai (1689–1752)** devotes **Sur Sassui** in the **Shah Jo Risalo** (30 Surs) to this story.
 - Mystical reading: Sassui's walk into the desert = the **soul's longing** for the divine; separation → reunion.
-- ⚠️ **Verse wording must be verified** against a scholarly source (Sorley, OUP; or the Bhittaipedia project) before
-  it goes on screen — exactly as we verified the 1907 Gazetteer text for Ep 1. Do NOT put an unverified Sindhi line on screen.
+- **Decision (Ahmad):** we do **not** show an on-screen Sindhi verse. Instead we **honour Bhittai in Urdu** — his
+  greatness, that he gave this desert love its immortal voice in *Sur Sassui*, and his status as the poet of
+  longing and of Sindh. No exact-wording verification needed.
 
 ## Fact vs tradition (on-screen honesty)
 - **Fact:** Bhambore exists, was a rich port, declined in the 13th c. as the Indus/creek changed; excavation history above.
 - **Tradition:** that Bhambore is *Sassi's* city; the grave in Lasbela; the earth swallowing the lovers.
 - **Debated:** Bhambore = Debal.
 - We present tradition *as* tradition ("داستان کہتی ہے…") and keep the proven facts separate — the brand's whole edge.
+
+## ✅ Primary-source reading (ACTUALLY READ — 2026-11-27)
+Read verbatim: **Cousens 1929, the Bhambor chapter (pp. 80–81)** via the archive.org full text, and the
+LiveHistoryIndia Debal article in full. (The paid reports — F.A. Khan, Parthica — and Cousens pp. 5–30/46–63
+are **not yet read**; claims from them stay flagged.)
+
+**What Cousens 1929 actually says (our on-screen document) — big upgrades:**
+- **The record names the place after Sassi.** Cousens: the ruins have "been connected with the loves of Sassui
+  and Punhun, a favourite story still told in the homes of Sind," and **the site "is thus also called
+  Sassui-jo-Takar"** (Sassi's Hill/Mound). ⇒ a *real 1929 archaeological book* ties the legend to the place and
+  even calls the hill by her name. This is the Ep-2 equivalent of Ep 1's Gazetteer validating the fairies. **Centrepiece.**
+- **Cousens REJECTED Bhambor = Debal** — "too insignificant a site to have been that of the city which for some
+  time defied the forces of the Arab invaders"; he thought it only "an outpost guarding the creek, or a small port."
+  A footnote: the *Tuhfatu-l-Kiram* "mentions both Debal and Bhambor as two different places." ⇒ the Debal question
+  is a **century-old live dispute**, not a modern footnote: 1920s diggers said Debal; Cousens (1929) said no.
+- **A one-night destruction legend.** Via Elliot, Cousens records the town was destroyed "in a single night, to the
+  divine wrath which its ruler's sins drew down upon it," its fall "mixed up with the story of King Dalu Rai"
+  (presented as legend). ⇒ a second eerie layer: a sinful king, a city gone overnight — folk memory of a real death.
+- **The river left it (primary-sourced).** "When the creek became disconnected with the Indus, the place was most
+  likely then abandoned and fell into ruin"; the sea "was not so far from it as now"; Cunningham thought it deserted
+  "about A.D. 1250," once the Indus's main western branch flowed past it.
+- **Quotable physical detail:** site "600 by 400 yards"; outer wall "8 to 10 feet wide"; "33 miles east of Karachi";
+  "Nothing now remains but the foundations of walls"; corroded copper coins, shells in abundance, glazed pottery,
+  glass, clay coin moulds.
+- **Caveats (OCR / unread):** "A.D. 1250" and "Bhambo Raja" are rough OCR — verify exact wording before on-screen quote.
+  A possible pp.14–30 "Bhanbhorai founded Bhambor" + Sassi footnote was **not** verified — do not assert it yet.
+
+**What the Debal article adds (modern view):**
+- Mosque with **Kufic inscriptions dated 727 CE and 906 CE**; if 727 is the build date, among the earliest mosques
+  in the subcontinent (16 yrs after Qasim). Mosque plan 34×35 m. A wall split the city **east/west — a Shiva temple
+  in the west, the mosque in the east** (a layered pagan→Muslim city). Trade goods from Syria, Iran, Iraq, China.
+  The Debal story rests on the 8th-c. **Chachnama** (attack triggered by piracy off Debal).
+- **Ivory figure correction:** this article says **~40 kg of worked ivory** (earlier "~6,675 pieces" is a separate
+  popular claim). Present as "thousands of ivory pieces / about 40 kg — reported," not as a hard count.
 
 ## Sources
 - [Banbhore — Wikipedia](https://en.wikipedia.org/wiki/Banbhore) · [Sassui Punnhun — Wikipedia](https://en.wikipedia.org/wiki/Sassui_Punnhun) · [Shah Jo Risalo — Wikipedia](https://en.wikipedia.org/wiki/Shah_Jo_Risalo)
